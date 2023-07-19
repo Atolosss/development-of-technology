@@ -3,9 +3,11 @@ package lesson_oop_homework;
 public class Dog extends Animal {
 
 
+    public static final int MAXRUN = 500;
+    public static final int MAXSWIM = 10;
     private static int count = 0;
 
-    public Dog(String name) {
+    public Dog(final String name) {
         super(name);
         count++;
     }
@@ -18,15 +20,15 @@ public class Dog extends Animal {
     }
 
     @Override
-    public void run(int distance) {
-        if (distance <= 500) {
+    public void run(final int distance) {
+        if (distance <= MAXRUN) {
             System.out.println("Собака пробежала " + distance + " м.");
         }
     }
 
     @Override
-    public void swim(int distance) {
-        if (distance <= 10) {
+    public void swim(final int distance) {
+        if (distance <= MAXSWIM) {
             System.out.println("Собака пропылала " + distance + " м.");
         }
     }

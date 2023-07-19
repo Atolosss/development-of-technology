@@ -5,11 +5,11 @@ public abstract class Animal {
     private static int count = 0;
     private String name;
 
-    public Animal(String name) {
-        if(name==null || name.equals("")){
+    public Animal(final String name) {
+        if (name == null || name.equals("")) {
 
             this.name = "default";
-        }else {
+        } else {
 
 
             this.name = name;
@@ -26,7 +26,7 @@ public abstract class Animal {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
