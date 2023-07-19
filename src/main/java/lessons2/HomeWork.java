@@ -1,6 +1,5 @@
 package lessons2;
 
-import java.math.BigInteger;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -22,7 +21,6 @@ public class HomeWork {
         for (int i = 0; i < array.length; i++) {
             if (i == 0) {
                 array[i] = i;
-
             } else {
                 array[i] = array[i - 1] + step;
             }
@@ -40,12 +38,9 @@ public class HomeWork {
         }
     }
 
-    public static void fillingDiagonally() {
-        int[][] arr = new int[3][3];
+    public static void fillingDiagonally(int[][] arr) {
         for (int i = 0; i < arr.length; i++) {
             arr[i][i] = 1;
-        }
-        for (int i = 0; i < arr.length; i++) {
             arr[i][(arr.length - 1) - i] = 1;
         }
     }
@@ -68,7 +63,6 @@ public class HomeWork {
         int sum1 = 0, sum2 = 0;
         int count = 0;
 
-
         while (count < array.length) {
             for (int i = 0; i <= count; i++) {
                 sum1 += array[i];
@@ -86,13 +80,13 @@ public class HomeWork {
         return check;
     }
 
-
     public static void guessTheNumberGame() {
+        Random random = new Random();
         int answer = 1;
         int attempt = 0;
         Scanner sc = new Scanner(System.in);
         while (answer != 0) {
-            int randomNumber = (int) (Math.random() * 9);
+            int randomNumber = random.nextInt(9);
             while (attempt < 3) {
                 System.out.println("Введите число :");
                 int number = sc.nextInt();
