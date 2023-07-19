@@ -5,7 +5,12 @@ import java.util.Scanner;
 
 public class HomeWork {
 
-    public static int[] arrayChange(int[] array) {
+    public static final int STEP = 3;
+
+    private HomeWork() {
+    }
+
+    public static int[] arrayChange(final int[] array) {
         for (int i = 0; i < array.length; i++) {
             if (array[i] == 0) {
                 array[i] = 1;
@@ -17,7 +22,7 @@ public class HomeWork {
     }
 
     public static int[] arrayFilling(int[] array) {
-        int step = 3;
+        int step = STEP;
         for (int i = 0; i < array.length; i++) {
             if (i == 0) {
                 array[i] = i;

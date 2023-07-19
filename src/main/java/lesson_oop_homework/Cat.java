@@ -1,24 +1,28 @@
 package lesson_oop_homework;
 
 public class Cat extends Animal {
-    int distance = 0;
 
-    int count = 0;
+
+    private static int count = 0;
+
+    public Cat(String name) {
+        super(name);
+        count++;
+    }
+
+    public static int getCount() {
+        return count;
+    }
 
     @Override
-    public void run() {
+    public void run(int distance) {
         if (distance <= 200) {
             System.out.println("Кот пробеажал " + distance + " м.");
         }
     }
 
     @Override
-    public void swim() {
+    public void swim(int distance) {
         System.out.println("Коты не плавают");
-    }
-
-    public Cat(int distance) {
-        this.distance = distance;
-        count++;
     }
 }

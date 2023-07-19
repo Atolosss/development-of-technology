@@ -1,17 +1,36 @@
 package lesson_oop_homework;
 
-public class Animal {
+public abstract class Animal {
 
-    int count= 0;
-    public void run(){
-        System.out.println("Животное бежит");
-    };
+    private static int count = 0;
+    private String name;
 
-    public void swim(){
-        System.out.println("Животное плывет");
-    }
+    public Animal(String name) {
+        if(name==null || name.equals("")){
 
-    public Animal() {
+            this.name = "default";
+        }else {
+
+
+            this.name = name;
+        }
         count++;
     }
+
+    public static int getCount() {
+        return count;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public abstract void run(int distance);
+
+    public abstract void swim(int distance);
 }
