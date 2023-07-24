@@ -10,6 +10,9 @@ public final class HomeWork {
 
     public static final int SIX = 6;
     public static final int BOUND = 9;
+    public static final String[] WORDS = new String[]{"apple", "orange", "lemon", "banana", "apricot", "avocado", "broccoli", "carrot",
+            "cherry", "garlic", "grape", "melon", "leak", "kiwi", "mango", "mushroom", "nut", "olive", "pea", "peanut",
+            "pear", "pepper", "pineapple", "pumpkin", "potato"};
 
     private HomeWork() {
     }
@@ -121,15 +124,11 @@ public final class HomeWork {
     public void wordGuessingGame() {
 
 
-        String[] words = {"apple", "orange", "lemon", "banana", "apricot", "avocado", "broccoli", "carrot",
-                "cherry", "garlic", "grape", "melon", "leak", "kiwi", "mango", "mushroom", "nut", "olive", "pea", "peanut",
-                "pear", "pepper", "pineapple", "pumpkin", "potato"};
-
         Random random = new Random();
-        String secretWord = words[random.nextInt(words.length)];
+        String secretWord = WORDS[random.nextInt(WORDS.length)];
         int wordLength = secretWord.length();
 
-        System.out.println("Компьютер загадал слово из списка.");
+        System.out.println("Компьютер загадал слово.");
 
         Scanner scanner = new Scanner(System.in);
 
