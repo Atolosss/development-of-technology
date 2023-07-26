@@ -1,6 +1,6 @@
 package lesson_string_homework;
 
-public class Main {
+public final class Main {
     public static void main(String[] args) {
         Cat[] nursery = new Cat[6];
         nursery[0] = new Cat("Бася", 10);
@@ -16,5 +16,7 @@ public class Main {
         for (Cat n : nursery) {
             System.out.println(n.getName() + " сытость: " + n.isSatiety());
         }
+
+        HomeWork.maxSum("abc cca bbcc");
     }
 }
