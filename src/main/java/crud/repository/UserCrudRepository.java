@@ -11,6 +11,6 @@ public interface UserCrudRepository {
     Optional<User> findById(long id);
     Optional<User> findByUser(User user); //equals / hashcode
     User save(User user); //update
-    boolean delete(long id);
+    void delete(long id);
     List<User> findAll();
 }

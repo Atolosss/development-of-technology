@@ -15,7 +15,22 @@ public class UserRepository_2 implements UserCrudRepository {
     }
 
     @Override
+    public Optional<User> findByUser(User user) {
+        return Optional.empty();
+    }
+
+    @Override
     public User save(User user) {
+        return null;
+    }
+
+    @Override
+    public void delete(long id) {
+
+    }
+
+    @Override
+    public List<User> findAll() {
         return null;
     }
 }
