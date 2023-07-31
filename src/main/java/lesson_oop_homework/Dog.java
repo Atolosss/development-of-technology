@@ -13,8 +13,6 @@ public class Dog extends Animal {
     }
 
 
-
-
     public static int getCount() {
         return count;
     }
@@ -29,7 +27,7 @@ public class Dog extends Animal {
     @Override
     public void swim(final int distance) {
         if (distance <= MAXSWIM) {
-            System.out.println("Собака пропылала " + distance + " м.");
+            System.out.println("Собака проплыла " + distance + " м.");
         }
     }
 
