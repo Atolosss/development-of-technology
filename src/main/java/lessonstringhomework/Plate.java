@@ -1,4 +1,4 @@
-package lesson_string_homework;
+package lessonstringhomework;
 
 public class Plate {
     private int food;

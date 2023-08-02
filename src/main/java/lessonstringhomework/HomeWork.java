@@ -1,4 +1,4 @@
-package lesson_string_homework;
+package lessonstringhomework;
 
 public final class HomeWork {
     public static final int A = 1;

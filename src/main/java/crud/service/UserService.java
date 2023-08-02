@@ -2,23 +2,23 @@ package crud.service;
 
 import crud.exception.UserNotFoundException;
 import crud.model.User;
-import crud.repository.UserCrudRepository;
+import crud.repository.CrudRepository;
 
 public class UserService {
-    private final UserCrudRepository userCrudRepository;
+    private final CrudRepository CrudRepository;
 
-    public UserService(UserCrudRepository userCrudRepository) {
-        this.userCrudRepository = userCrudRepository;
+    public UserService(final CrudRepository userCrudRepository) {
+        this.CrudRepository = userCrudRepository;
     }
 
-    public User findById(long id) {
-        return userCrudRepository.findById(id)
+    public User findById(final long id) {
+        return CrudRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("user with id " + id + " not found!"));
     }
 
-    public User save(User user) {
-        return userCrudRepository.findById(user.getId())
-                .orElse(userCrudRepository.save(user));
+    public User save(final User user) {
+        return (User) CrudRepository.findById(user.getId())
+                .orElse(CrudRepository.save(user));
     }
 
 }
