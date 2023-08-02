@@ -1,4 +1,4 @@
-package lesson_string_homework;
+package lessonstringhomework;
 
 public class Cat {
     private final String name;

@@ -4,24 +4,21 @@ public class User {
     private long id;
     private String name;
 
-    public User(long id, String name) {
+    public User(final long id, final String name) {
         this.id = id;
         this.name = name;
     }
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return "User{" + "id=" + id + ", name='" + name + '\'' + '}';
     }
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(final long id) {
         this.id = id;
     }
 
@@ -29,7 +26,7 @@ public class User {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 }

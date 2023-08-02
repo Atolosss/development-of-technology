@@ -1,4 +1,4 @@
-package lesson_oop_homework.part2;
+package lessonoophomework.part2;
 
 public class SmartLamp implements SmartDevice {
 

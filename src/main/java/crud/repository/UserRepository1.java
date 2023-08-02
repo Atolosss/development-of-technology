@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserRepository_1 implements UserCrudRepository {
+public class UserRepository1 implements CrudRepository {
     private final List<User> users = new ArrayList<>();
 
     @Override
-    public Optional<User> findById(long id) {
+    public Optional<User> findById(final long id) {
         for (User u : users) {
             if (u.getId() == id) {
                 return Optional.of(u);
@@ -20,25 +20,22 @@ public class UserRepository_1 implements UserCrudRepository {
     }
 
     @Override
-    public Optional<User> findByUser(User user) {
-        for (User u : users) {
-            if (u.getName() == user.getName()) {
-                return Optional.of(u);
-            }
-        }
-        return Optional.empty();
+    public Optional<User> findByGeneric(final User user) {
+        return users.stream()
+                .filter(u -> u.equals(user))
+                .findFirst();
     }
 
     @Override
-    public User save(User user) {
+    public void save(final User user) {
         users.add(user);
-        return user;
     }
 
+
     @Override
-    public void delete(long id) {
-        for(User u : users){
-            if (u.getId() == id){
+    public void delete(final long id) {
+        for (User u : users) {
+            if (u.getId() == id) {
                 users.remove(u);
             }
         }

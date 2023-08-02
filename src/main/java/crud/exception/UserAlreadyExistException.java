@@ -1,7 +1,7 @@
 package crud.exception;
 
 public class UserAlreadyExistException extends RuntimeException {
-    public UserAlreadyExistException(String message) {
+    public UserAlreadyExistException(final String message) {
         super(message);
     }
 }
