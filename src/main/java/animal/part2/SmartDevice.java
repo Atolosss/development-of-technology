@@ -1,4 +1,4 @@
-package lessonoophomework.part2;
+package animal.part2;
 
 public interface SmartDevice {
 

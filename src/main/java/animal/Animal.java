@@ -1,4 +1,4 @@
-package lessonoophomework;
+package animal;
 
 public abstract class Animal {
 
