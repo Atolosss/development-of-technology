@@ -6,21 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserRepository1 implements CrudRepository {
+public class UserRepository1 implements CrudRepository<User> {
     private final List<User> users = new ArrayList<>();
 
     @Override
     public Optional<User> findById(final long id) {
-        for (User u : users) {
-            if (u.getId() == id) {
-                return Optional.of(u);
-            }
-        }
-        return Optional.empty();
+        return users.stream()
+                .filter(user -> user.getId() == id)
+                .findFirst();
     }
 
     @Override
-    public Optional<User> findByGeneric(final User user) {
+    public Optional<User> findByObject(final User user) {
         return users.stream()
                 .filter(u -> u.equals(user))
                 .findFirst();
@@ -34,11 +31,7 @@ public class UserRepository1 implements CrudRepository {
 
     @Override
     public void delete(final long id) {
-        for (User u : users) {
-            if (u.getId() == id) {
-                users.remove(u);
-            }
-        }
+        users.removeIf(u -> u.getId() == id);
     }
 
     @Override

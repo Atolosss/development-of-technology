@@ -1,5 +1,7 @@
 package generics;
 
+import collection.MyArrayList;
+
 import java.util.ArrayList;
 import java.util.List;
 

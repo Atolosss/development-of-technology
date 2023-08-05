@@ -1,6 +1,6 @@
-package generics;
+package collection;
 
-public class MyArrayList<T> {
+public class MyArrayList<T> implements MyList<T> {
     private static final int DEFAULT_CAPACITY = 10;
     private Object[] data;
     private int size;
@@ -10,6 +10,7 @@ public class MyArrayList<T> {
         this.size = 0;
     }
 
+    @Override
     public void add(final T element) {
         if (size == data.length) {
             int newCapacity = data.length * 2;
@@ -20,6 +21,7 @@ public class MyArrayList<T> {
         data[size++] = element;
     }
 
+    @Override
     public T get(final int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Мы вышли за границы");
@@ -27,13 +29,15 @@ public class MyArrayList<T> {
         return (T) data[index];
     }
 
-    public void set(final int index,final T element) {
+    @Override
+    public void set(final int index, final T element) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Мы вышли за границы");
         }
         data[index] = element;
     }
 
+    @Override
     public void remove(final int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index out of range: " + index);
@@ -45,14 +49,15 @@ public class MyArrayList<T> {
         size--;
     }
 
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public boolean isEmpty() {
         return size == 0;
     }
-
 
 
 }

@@ -1,26 +1,21 @@
-package crud.model;
+package collection;
 
 import java.util.Objects;
 
 public class User {
-    private long id;
+    private int id;
     private String name;
 
-    public User(final long id, final String name) {
+    public User(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return "User{" + "id=" + id + ", name='" + name + '\'' + '}';
-    }
-
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(final long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -28,8 +23,16 @@ public class User {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 
     @Override
@@ -37,11 +40,13 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id;
+        return id == user.id && Objects.equals(name, user.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, name);
     }
+
+
 }
