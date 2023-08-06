@@ -6,9 +6,9 @@ public class User {
     private long id;
     private String name;
 
-    public User(final long id, final String name) {
-        this.id = id;
-        this.name = name;
+    public User(final long value, final String str) {
+        this.id = value;
+        this.name = str;
     }
 
     @Override
@@ -20,20 +20,20 @@ public class User {
         return id;
     }
 
-    public void setId(final long id) {
-        this.id = id;
+    public void setId(final long value) {
+        this.id = value;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    public void setName(final String str) {
+        this.name = str;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;

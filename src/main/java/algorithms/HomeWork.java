@@ -93,6 +93,21 @@ public final class HomeWork {
         return check;
     }
 
+    public static void reversString(final String string) {
+        StringBuilder stringBuilder = new StringBuilder(string);
+        stringBuilder.reverse();
+        System.out.println(stringBuilder);
+    }
+
+    public static void findMaxValue(int[] num) {
+        int maxValue = Integer.MIN_VALUE;
+        for (Integer i : num) {
+            if (i > maxValue) maxValue = i;
+        }
+        System.out.println(maxValue);
+    }
+
+
     public void guessTheNumberGame() {
         Random random = new Random();
         int answer = 1;
@@ -119,7 +134,6 @@ public final class HomeWork {
         }
         sc.close();
     }
-
 
     public void wordGuessingGame() {
 

@@ -7,7 +7,7 @@ public interface MyList<T> {
 
     void set(int index, T element);
 
-    void remove(int index);
+    T remove(int index);
 
     int size();
 

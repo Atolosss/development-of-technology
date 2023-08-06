@@ -38,7 +38,7 @@ public class MyArrayList<T> implements MyList<T> {
     }
 
     @Override
-    public void remove(final int index) {
+    public T remove(final int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index out of range: " + index);
         }
@@ -47,6 +47,7 @@ public class MyArrayList<T> implements MyList<T> {
         }
         data[size - 1] = null;
         size--;
+        return null;
     }
 
     @Override
