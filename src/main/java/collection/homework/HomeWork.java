@@ -18,25 +18,12 @@ public class HomeWork {
 
 
 
-    public static void findString(final String[] stringList) {
-
-        HashSet<String> uniqueWords = new HashSet<>(Arrays.asList(stringList));
-
-        HashMap<String, Integer> wordCount = new HashMap<>();
+    public static Map<String, Integer> findString(final String[] stringList) {
+        Map<String, Integer> wordCount = new HashMap<>();
         for (String word : stringList) {
-            if (wordCount.containsKey(word)) {
-                wordCount.put(word, wordCount.get(word) + 1);
-            } else {
-                wordCount.put(word, 1);
-            }
+            wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
         }
-        System.out.println(Arrays.toString(uniqueWords.toArray()));
-
-        for (String word : wordCount.keySet()) {
-            int count = wordCount.get(word);
-            System.out.println(word + " : " + count);
-        }
-
+        return wordCount;
     }
 
     public static Set<Object> unionList(ArrayList<Object> list1, ArrayList<Object> list2) {
