@@ -2,40 +2,43 @@ package crud.repository;
 
 import crud.model.User;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserRepository2 implements CrudRepository<User> {
-    private final List<User> users = new ArrayList<>();
+//TODO: Изучить NIO (new input output) радота с пользователями в .csv файле
+
+//1;Igor;23
+//2;Vasya;30
+//3;Masha;12
+//4;asdasd;12
+//5;Vasya;30
+
+public class FileUserRepository implements CrudRepository<User> {
 
     @Override
     public Optional<User> findById(final long id) {
-        int idInt = (int) id;
-
-        return Optional.ofNullable(users.get(idInt));
+        return null;
     }
 
     @Override
     public Optional<User> findByObject(User user) {
-        return users.stream().filter(u -> u.equals(user)).findFirst();
+        return null;
     }
 
 
     @Override
     public void save(final User user) {
-
-        users.add(user);
+        return;
     }
 
 
     @Override
     public void delete(final long id) {
-        users.remove(id);
+        return;
     }
 
     @Override
     public List<User> findAll() {
-        return users;
+        return null;
     }
 }

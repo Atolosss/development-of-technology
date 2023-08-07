@@ -6,7 +6,7 @@ public class HomeWork {
     public static void main(String[] args) {
         String[] stringList = new String[]{"Дятел", "Дятел", "овен", "телец", "рак", "машина", "рак",
                 "картина", "машина", "ключи", "карточка", "овощи", "ключи"};
-        findString(stringList);
+        calcFrequency(stringList);
 
         PhoneBook phoneBook = new PhoneBook();
         phoneBook.add("89166077913", "Markov");
@@ -18,7 +18,7 @@ public class HomeWork {
 
 
 
-    public static Map<String, Integer> findString(final String[] stringList) {
+    public static Map<String, Integer> calcFrequency(final String[] stringList) {
         Map<String, Integer> wordCount = new HashMap<>();
         for (String word : stringList) {
             wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);

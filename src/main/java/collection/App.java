@@ -1,19 +1,35 @@
 package collection;
 
-import java.util.HashSet;
+import java.util.Comparator;
+import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.function.ToIntFunction;
 
 public class App {
     public static void main(String[] args) {
-        Set<User> userSet = new HashSet<>();
-        User user = new User(1, "1");
-        System.out.println(user.hashCode());
+        User user = User.builder()
+                .id(1)
+                .name("1")
+                .age(12)
+                .build();
+        User user2 = User.builder()
+                .id(1)
+                .name("1")
+                .age(10)
+                .build();
+        User user3 = User.builder()
+                .id(1)
+                .name("1")
+                .age(15)
+                .build();
 
-        userSet.add(user);
+        TreeSet<User> treeSet = new TreeSet<>(Comparator.comparingInt(User::getAge));
+        treeSet.add(user);
+        treeSet.add(user2);
+        treeSet.add(user3);
+        System.out.println(treeSet);
 
-        user.setName("2");
-        System.out.println(userSet.contains(user));
 
-        userSet.forEach(System.out::println);
     }
 }

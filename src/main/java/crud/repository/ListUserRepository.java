@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserRepository1 implements CrudRepository<User> {
+public class ListUserRepository implements CrudRepository<User> {
     private final List<User> users = new ArrayList<>();
 
     @Override
