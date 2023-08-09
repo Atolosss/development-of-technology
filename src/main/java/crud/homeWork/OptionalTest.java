@@ -2,8 +2,9 @@ package crud.homeWork;
 
 import java.util.Optional;
 
-public class OptionalTest {
-
+public final class OptionalTest {
+    private OptionalTest() {
+    }
 
     public static int getValue(final Optional<Integer> optional) {
         return optional.orElse(0);

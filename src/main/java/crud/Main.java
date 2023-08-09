@@ -4,7 +4,10 @@ package crud;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main {
+public final class Main {
+    private Main() {
+    }
+
     public static void main(final String[] args) {
         List<String> arrayList = new ArrayList<>();
         arrayList.add("1");

@@ -89,7 +89,7 @@ public class MyLinkedList<T> implements MyList<T> {
         return size == 0;
     }
 
-    final static class Node<T> {
+    final class Node<T> {
         private T data;
         private Node next;
 

@@ -17,7 +17,7 @@ public class UserRepository2 implements CrudRepository<User> {
     }
 
     @Override
-    public Optional<User> findByObject(User user) {
+    public Optional<User> findByObject(final User user) {
         return users.stream().filter(u -> u.equals(user)).findFirst();
     }
 

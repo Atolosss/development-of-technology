@@ -99,10 +99,12 @@ public final class HomeWork {
         System.out.println(stringBuilder);
     }
 
-    public static void findMaxValue(int[] num) {
+    public static void findMaxValue(final int[] num) {
         int maxValue = Integer.MIN_VALUE;
         for (Integer i : num) {
-            if (i > maxValue) maxValue = i;
+            if (i > maxValue) {
+                maxValue = i;
+            }
         }
         System.out.println(maxValue);
     }
