@@ -1,5 +1,6 @@
 package algorithms;
 
+import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -109,6 +110,29 @@ public final class HomeWork {
         System.out.println(maxValue);
     }
 
+    // abc ccc bbb cccc, a = 1 , b = 2, c = 3;
+//    TODO: возвращать не число ,а слово. StringBuilder или String
+
+    public static int getMaxWord(String str, Map<Character, Integer> charSize) {
+        char[] chars = str.toCharArray();
+        int max = 0;
+        int currentMax = 0;
+
+
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == ' ' || i == chars.length - 1) {
+                if (currentMax > max) {
+                    max = currentMax;
+                }
+                currentMax = 0;
+            } else {
+                currentMax += charSize.get(chars[i]);
+            }
+
+        }
+        return max;
+
+    }
 
     public void guessTheNumberGame() {
         Random random = new Random();
@@ -136,6 +160,10 @@ public final class HomeWork {
         }
         sc.close();
     }
+//    sting => abc bbc ccb tess
+//sting => gfd hjk, map <key, value>
+//нужно написать функцию, которая вернет слово с наибольшей суммой.
+//Сумма - это соотношение буква к какому-то числу
 
     public void wordGuessingGame() {
 
