@@ -5,6 +5,7 @@ import java.util.Objects;
 public class User {
     private long id;
     private String name;
+    private int age;
 
     public User(final long value, final String str) {
         this.id = value;

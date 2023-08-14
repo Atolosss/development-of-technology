@@ -6,32 +6,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserRepository1 implements CrudRepository<User> {
+public class UserRepository2 implements CrudRepository<User> {
     private final List<User> users = new ArrayList<>();
 
     @Override
     public Optional<User> findById(final long id) {
-        return users.stream()
-                .filter(user -> user.getId() == id)
-                .findFirst();
+        int idInt = (int) id;
+
+        return Optional.ofNullable(users.get(idInt));
     }
 
     @Override
-    public Optional<User> findByObject(final User user) {
-        return users.stream()
-                .filter(u -> u.equals(user))
-                .findFirst();
+    public Optional<User> findByObject(User user) {
+        return users.stream().filter(u -> u.equals(user)).findFirst();
     }
+
 
     @Override
     public void save(final User user) {
+
         users.add(user);
     }
 
 
     @Override
     public void delete(final long id) {
-        users.removeIf(u -> u.getId() == id);
+        users.remove(id);
     }
 
     @Override

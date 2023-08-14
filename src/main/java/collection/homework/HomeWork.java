@@ -1,17 +1,9 @@
 package collection.homework;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.ArrayList;
+import java.util.*;
 
-
-public final class HomeWork {
-    private HomeWork() {
-    }
-
-    public static void main(final String[] args) {
+public class HomeWork {
+    public static void main(String[] args) {
         String[] stringList = new String[]{"Дятел", "Дятел", "овен", "телец", "рак", "машина", "рак",
                 "картина", "машина", "ключи", "карточка", "овощи", "ключи"};
         findString(stringList);
@@ -25,6 +17,7 @@ public final class HomeWork {
     }
 
 
+
     public static Map<String, Integer> findString(final String[] stringList) {
         Map<String, Integer> wordCount = new HashMap<>();
         for (String word : stringList) {
@@ -33,7 +26,7 @@ public final class HomeWork {
         return wordCount;
     }
 
-    public static Set<Object> unionList(final ArrayList<Object> list1, final ArrayList<Object> list2) {
+    public static Set<Object> unionList(ArrayList<Object> list1, ArrayList<Object> list2) {
         Set<Object> setLists = new HashSet<>();
         setLists.addAll(list1);
         setLists.addAll(list2);
