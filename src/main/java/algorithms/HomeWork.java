@@ -113,93 +113,63 @@ public final class HomeWork {
     // abc ccc bbb cccc, a = 1 , b = 2, c = 3;
 //    TODO: возвращать не число ,а слово. StringBuilder или String
 
-    public static int getMaxWord(final String str, final Map<Character, Integer> charSize) {
+    public static StringBuilder getMaxWord(final String str, final Map<Character, Integer> charSize) {
         char[] chars = str.toCharArray();
         int max = 0;
         int currentMax = 0;
-
-
+        int count = 0;
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < chars.length; i++) {
             if (chars[i] == ' ' || i == chars.length - 1) {
                 if (currentMax > max) {
                     max = currentMax;
+                    count = i;
                 }
                 currentMax = 0;
             } else {
                 currentMax += charSize.get(chars[i]);
             }
-
         }
-        return max;
-
-    }
-
-    public void guessTheNumberGame() {
-        Random random = new Random();
-        int answer = 1;
-        int attempt = 0;
-        Scanner sc = new Scanner(System.in);
-        while (answer != 0) {
-            int randomNumber = random.nextInt(BOUND);
-            while (attempt < REPEAT) {
-                System.out.println("Введите число :");
-                int number = sc.nextInt();
-                if (number > randomNumber) {
-                    System.out.println("Ваше число больше");
-                } else if (number < randomNumber) {
-                    System.out.println("Ваше число меньше");
-                } else {
-                    System.out.println("Поздравляю! Вы угадали!");
-                    break;
-                }
-                attempt++;
+        for (int i = count; chars[i] != ' '; i--) {
+            if (chars[i] != ' ') {
+                sb.append(chars[i]);
             }
-            attempt = 0;
-            System.out.println("Повторить игру еще раз? 1 - да / 0 - нет");
-            answer = sc.nextInt();
         }
-        sc.close();
+        return sb.reverse();
     }
-//    sting => abc bbc ccb tess
+
+        public void guessTheNumberGame() {
+            Random random = new Random();
+            int answer = 1;
+            int attempt = 0;
+            Scanner sc = new Scanner(System.in);
+            while (answer != 0) {
+                int randomNumber = random.nextInt(BOUND);
+                while (attempt < REPEAT) {
+                    System.out.println("Введите число :");
+                    int number = sc.nextInt();
+                    if (number > randomNumber) {
+                        System.out.println("Ваше число больше");
+                    } else if (number < randomNumber) {
+                        System.out.println("Ваше число меньше");
+                    } else {
+                        System.out.println("Поздравляю! Вы угадали!");
+                        break;
+                    }
+                    attempt++;
+                }
+                attempt = 0;
+                System.out.println("Повторить игру еще раз? 1 - да / 0 - нет");
+                answer = sc.nextInt();
+            }
+            sc.close();
+        }
+        //    sting => abc bbc ccb tess
 //sting => gfd hjk, map <key, value>
 //нужно написать функцию, которая вернет слово с наибольшей суммой.
 //Сумма - это соотношение буква к какому-то числу
 
-    public void wordGuessingGame() {
 
-
-        Random random = new Random();
-        String secretWord = WORDS[random.nextInt(WORDS.length)];
-        int wordLength = secretWord.length();
-
-        System.out.println("Компьютер загадал слово.");
-
-        Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            System.out.print("Введите ваш ответ: ");
-            String userGuess = scanner.nextLine().toLowerCase();
-
-            if (userGuess.equals(secretWord)) {
-                System.out.println("Поздравляем! Вы угадали слово!");
-                break;
-            } else {
-                int minLength = Math.min(wordLength, userGuess.length());
-                StringBuilder hint = new StringBuilder("###############");
-
-                for (int i = 0; i < minLength; i++) {
-                    if (userGuess.charAt(i) == secretWord.charAt(i)) {
-                        hint.setCharAt(i, userGuess.charAt(i));
-                    }
-                }
-
-                System.out.println("Вы не угадали. Подсказка:");
-                System.out.println(hint);
-            }
-        }
-
-        scanner.close();
-    }
 }
 
 
