@@ -1,36 +1,23 @@
 package crud.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+
 import java.util.Objects;
 
+@AllArgsConstructor
+@Builder
+@Data
 public class User {
     private long id;
     private String name;
     private int age;
 
-    public User(final long value, final String str) {
-        this.id = value;
-        this.name = str;
-    }
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", name='" + name + '\'' + '}';
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(final long value) {
-        this.id = value;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String str) {
-        this.name = str;
+        return "User{" + "id=" + id + ", name='" + name + '\'' + ", age=" + age + '}';
     }
 
     @Override
@@ -42,11 +29,12 @@ public class User {
             return false;
         }
         User user = (User) o;
-        return id == user.id;
+        return id == user.id && age == user.age && Objects.equals(name, user.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, name, age);
     }
+
 }

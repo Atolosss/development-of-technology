@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserRepository2 implements CrudRepository<User> {
+public class ListUserRepository implements CrudRepository<User> {
     private final List<User> users = new ArrayList<>();
 
     @Override
@@ -17,7 +17,8 @@ public class UserRepository2 implements CrudRepository<User> {
     }
 
     @Override
-    public Optional<User> findByObject(User user) {
+    public Optional<User> findByObject(final User user) {
+
         return users.stream().filter(u -> u.equals(user)).findFirst();
     }
 

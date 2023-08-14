@@ -113,7 +113,7 @@ public final class HomeWork {
     // abc ccc bbb cccc, a = 1 , b = 2, c = 3;
 //    TODO: возвращать не число ,а слово. StringBuilder или String
 
-    public static int getMaxWord(String str, Map<Character, Integer> charSize) {
+    public static int getMaxWord(final String str, final Map<Character, Integer> charSize) {
         char[] chars = str.toCharArray();
         int max = 0;
         int currentMax = 0;
