@@ -3,18 +3,15 @@ package crud.repository;
 import java.util.List;
 import java.util.Optional;
 
-//Create read update delete
-public interface CrudRepository<T> {
+public interface CrudRepository<T, K> {
 
-    Optional<T> findById(long id);
-
+    Optional<T> findById(K id);
 
     Optional<T> findByObject(T t);
 
     void save(T t);
 
-    void delete(long id);
-
+    void delete(K id);
 
     List<T> findAll();
 }
