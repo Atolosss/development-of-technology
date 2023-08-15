@@ -2,11 +2,7 @@ package crud.repository;
 
 import crud.model.User;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,9 +11,10 @@ import java.util.Optional;
 public class FileUserRepository implements FileCrudRepository<User> {
 
     public static final int COLUMN = 3;
-    private final String filePath;
-    public FileUserRepository(final String filePathInput) {
-        this.filePath = filePathInput;
+    private final File file;
+    public FileUserRepository(final File file) {
+        this.file = file;
+
     }
 
 
@@ -67,7 +64,7 @@ public class FileUserRepository implements FileCrudRepository<User> {
 
     private List<User> readUsersFromFile() {
         List<User> users = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(";");
@@ -85,7 +82,7 @@ public class FileUserRepository implements FileCrudRepository<User> {
     }
 
     private void writeUsersToFile(final List<User> users) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (User user : users) {
                 writer.write(user.getId() + ";" + user.getName() + ";" + user.getAge());
                 writer.newLine();
