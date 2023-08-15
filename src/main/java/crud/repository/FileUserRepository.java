@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -20,6 +21,7 @@ public class FileUserRepository implements CrudRepository<User, Long> {
 
     public Optional<User> findById(final Long id) {
         return readUsersFromFile()
+                .stream()
                 .filter(user -> user.getId().equals(id))
                 .findFirst();
     }
@@ -27,42 +29,50 @@ public class FileUserRepository implements CrudRepository<User, Long> {
     @Override
     public Optional<User> findByObject(final User user) {
         return readUsersFromFile()
+                .stream()
                 .filter(usr -> usr.equals(user))
                 .findFirst();
     }
 
-    //TODO если юзер user существует, то апдетим существующего, иначе аппендим нового
     @Override
     public void save(final User user) {
-//        List<User> users = readUsersFromFile();
-//        for (User u : users) {
-//            if (!u.equals(user)) {
-//                users.add(user);
-//                writeUsersToFile(users);
-//            }
-//        }
+        try {
+            List<User> users = new ArrayList<>(readUsersFromFile());
+            if (users.contains(user)) {
+                int indexOf = users.indexOf(user);
+                users.set(indexOf, user);
+                Files.writeString(Paths.get(file.toURI()), UserMapper.usersToLine(users), StandardOpenOption.TRUNCATE_EXISTING);
+            } else {
+                users.add(user);
+                Files.writeString(Paths.get(file.toURI()), UserMapper.userToLine(user), StandardOpenOption.APPEND);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
-    //TODO рефактор с stream + nio
     @Override
     public void delete(final Long id) {
-//        List<User> users = readUsersFromFile();
-//        for (User u : users) {
-//            if (u.getId() == id) {
-//                users.remove(u);
-//                writeUsersToFile(users);
-//            }
-//        }
+        List<User> userList = readUsersFromFile()
+                .stream()
+                .filter(user -> !user.getId().equals(id))
+                .toList();
+        try {
+            Files.writeString(Paths.get(file.toURI()), UserMapper.usersToLine(userList), StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public List<User> findAll() {
-        return readUsersFromFile().toList();
+        return readUsersFromFile();
     }
 
-    private Stream<User> readUsersFromFile() {
+    private List<User> readUsersFromFile() {
         try (Stream<String> lines = Files.lines(Paths.get(file.toURI()))) {
-            return lines.map(UserMapper::lineToUser);
+            return lines.map(UserMapper::lineToUser).toList();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

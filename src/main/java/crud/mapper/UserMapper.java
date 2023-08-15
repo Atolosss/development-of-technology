@@ -20,7 +20,7 @@ public class UserMapper {
     }
 
     public static String userToLine(final User user) {
-        return user.getId() + SEPARATOR + user.getName() + SEPARATOR + user.getAge();
+        return user.getId() + SEPARATOR + user.getName() + SEPARATOR + user.getAge() + System.lineSeparator();
     }
 
     public static String usersToLine(final List<User> userList) {
