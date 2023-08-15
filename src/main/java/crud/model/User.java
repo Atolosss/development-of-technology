@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Builder
@@ -13,6 +14,7 @@ public class User {
     private Long id;
     private String name;
     private int age;
+    private BigDecimal salary;
 
     @Override
     public boolean equals(Object o) {
