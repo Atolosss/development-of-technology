@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -14,15 +15,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-//TODO: Файл содержит шапку, поправить логику в коде
-//TODO: BigDecimal разобраться, что это и зачем
+//TODO: Файл содержит шапку, поправить логику в коде+
+//TODO: BigDecimal разобраться, что это и зачем+
 //TODO: Расширить функционал для новой колонки salary
 //TODO: nio vs io
 
-//TODO: Посчитать среднюю зарплату по юзерам старше 30 лет
-//TODO: Просуммировать колонки id, age, salary и посчитать общуюю сумму этих колонок -> BigDecimal
-//TODO: Все Юзеры стоящие на четных id имеют зарплату больше 2000.0
-//TODO: Получить уникальных список имен для всех юзеров начиная с позиции 10
+//TODO: Посчитать среднюю зарплату по юзерам старше 30 лет+
+//TODO: Просуммировать колонки id, age, salary и посчитать общуюю сумму этих колонок -> BigDecimal+
+//TODO: Все Юзеры стоящие на четных id имеют зарплату больше 2000.0+
+//TODO: Получить уникальных список имен для всех юзеров начиная с позиции 10+
 //TODO: Найти максимальную зарплату по всем юзерам
 
 @RequiredArgsConstructor
@@ -43,6 +44,56 @@ public class FileUserRepository implements CrudRepository<User, Long> {
                 .stream()
                 .filter(usr -> usr.equals(user))
                 .findFirst();
+    }
+
+    public BigDecimal averageSalary(int age) {
+        BigDecimal sumSalary = readUsersFromFile().stream()
+                .filter(user -> user.getAge() > age)
+                .map(User::getSalary)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        long count = readUsersFromFile().stream()
+                .filter(user -> user.getAge() > age)
+                .count();
+
+        if (count == 0) {
+            return BigDecimal.ZERO;
+        }
+
+        return sumSalary.divide(BigDecimal.valueOf(count));
+
+    }
+
+    public boolean salaryCheck() {
+        boolean check = readUsersFromFile()
+                .stream()
+                .allMatch(user -> user.getId() % 2 == 0 && user.getSalary().intValue() > 2000);
+        return check;
+
+    }
+
+    public List<String> findUniqName(final long line) {
+        return readUsersFromFile()
+                .stream()
+                .skip(line)
+                .map(User::getName).
+                distinct()
+                .toList();
+    }
+
+    public BigDecimal findMaxSalary() {
+        return readUsersFromFile()
+                .stream()
+                .map(User::getSalary)
+                .max(BigDecimal::compareTo)
+                .orElse(BigDecimal.ZERO);
+    }
+
+    public BigDecimal sumOfAllNumbers() {
+        return readUsersFromFile()
+                .stream()
+                .map(user -> user.getSalary().add(BigDecimal.valueOf(user.getId())).add(BigDecimal.valueOf(user.getAge())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     @Override
@@ -83,7 +134,10 @@ public class FileUserRepository implements CrudRepository<User, Long> {
 
     private List<User> readUsersFromFile() {
         try (Stream<String> lines = Files.lines(Paths.get(file.toURI()))) {
-            return lines.map(UserMapper::lineToUser).toList();
+            return lines.skip(1)
+                    .filter(line -> !line.isEmpty()) // Фильтруем пустые строки
+                    .map(UserMapper::lineToUser)
+                    .toList();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -5,6 +5,7 @@ import crud.model.User;
 import crud.repository.FileUserRepository;
 
 import java.io.File;
+import java.math.BigDecimal;
 
 public final class Main {
     private Main() {
@@ -12,28 +13,21 @@ public final class Main {
 
     public static void main(String[] args) {
         File file = new File("list.csv");
-        FileUserRepository repository = new FileUserRepository( file);
-
-        User user = getUser(1L, "Igor");
-        User user2 = getUser(2L, "Max");
-        User user3 = getUser(1L, "Vas");
-
-
-
-
-        repository.save(user);
-        repository.save(user2);
-        repository.save(user3);
-
-
+        FileUserRepository repository = new FileUserRepository(file);
+        User user = getUser(13L, "Igor");
+        System.out.println(repository.averageSalary(26));
+        System.out.println(repository.sumOfAllNumbers());
+        System.out.println(repository.salaryCheck());
+        System.out.println(repository.findUniqName(6));
 
     }
+
 
     private static User getUser(long id, String name) {
         return User.builder()
                 .id(id)
                 .name(name)
-                .age(25)
+                .age(25).salary(new BigDecimal("2500.12"))
                 .build();
     }
 }
