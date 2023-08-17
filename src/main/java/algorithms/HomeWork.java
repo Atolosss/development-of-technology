@@ -1,5 +1,6 @@
 package algorithms;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
@@ -135,28 +136,22 @@ public final class HomeWork {
 //    TODO: возвращать не число ,а слово. StringBuilder или String
     //TODO: сделать за O(n)
     public static StringBuilder getMaxWord(final String str, final Map<Character, Integer> charSize) {
-        char[] chars = str.toCharArray();
-        int max = 0;
-        int currentMax = 0;
-        int count = 0;
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < chars.length; i++) {
-            if (chars[i] == ' ' || i == chars.length - 1) {
-                if (currentMax > max) {
-                    max = currentMax;
-                    count = i;
-                }
-                currentMax = 0;
-            } else {
-                currentMax += charSize.get(chars[i]);
+        String[] words = str.split(" ");
+        StringBuilder maxWord = new StringBuilder();
+        int maxSum = 0;
+
+        for (String word : words) {
+            int currentSum = 0;
+            for (char c : word.toCharArray()) {
+                currentSum += charSize.get(c);
+            }
+            if (currentSum > maxSum) {
+                maxSum = currentSum;
+                maxWord = new StringBuilder(word);
             }
         }
-        for (int i = count; chars[i] != ' '; i--) {
-            if (chars[i] != ' ') {
-                sb.append(chars[i]);
-            }
-        }
-        return sb.reverse();
+
+        return maxWord;
     }
 
     public void guessTheNumberGame() {
@@ -212,11 +207,51 @@ public final class HomeWork {
     //
     //Follow up: Squaring each element and sorting the new array is very trivial, could you find an O(n) solution using a different approach?
 
+    public static int[] squaresOfASortedArray(final int[] array) {
+        int[] result = new int[array.length];
+        int left = 0;
+        int right = array.length - 1;
+        int index = array.length - 1;
+
+        while (left <= right) {
+            int leftSquare = (int) Math.pow(array[left], 2);
+            int rightSquare = (int) Math.pow(array[right], 2);
+
+            if (leftSquare > rightSquare) {
+                result[index] = leftSquare;
+                left++;
+            } else {
+                result[index] = rightSquare;
+                right--;
+            }
+            index--;
+        }
+
+        return result;
+    }
     //TODO: Two Sum
     //Example 2: Given a sorted array of unique integers and a target integer, return true if there exists a pair of numbers that sum to target, false otherwise. This problem is similar to Two Sum. (In Two Sum, the input is not sorted).
     //
     //For example, given nums = [1, 2, 4, 6, 8, 9, 14, 15] and target = 13, return true because 4 + 9 = 13.
+    public static boolean twoSum(int[] array, int target) {
+        int count = 0;
+        for (int i = 0; i < array.length; i++) {
+            for (int j = i+1;j<array.length;j++){
+                if(array[i]+array[j]==target){
+                    count = 1;
+                }
+            }
+        }
+        if(count==0){
+            return false;
+        }else {
+            return true;
+        }
+
+    }
 }
+
+
 
 
 
