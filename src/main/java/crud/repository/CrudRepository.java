@@ -15,5 +15,4 @@ public interface CrudRepository<T, K> {
 
     List<T> findAll();
 
-    //TODO: void saveAll(List<T>);
 }

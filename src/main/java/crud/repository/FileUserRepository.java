@@ -46,7 +46,7 @@ public class FileUserRepository implements CrudRepository<User, Long> {
                 .findFirst();
     }
 
-    public BigDecimal averageSalary(int age) {
+    public BigDecimal averageSalary(final int age) {
         BigDecimal sumSalary = readUsersFromFile().stream()
                 .filter(user -> user.getAge() > age)
                 .map(User::getSalary)
@@ -64,10 +64,10 @@ public class FileUserRepository implements CrudRepository<User, Long> {
 
     }
 
-    public boolean salaryCheck() {
+    public boolean salaryCheck(final int salary) {
         boolean check = readUsersFromFile()
                 .stream()
-                .allMatch(user -> user.getId() % 2 == 0 && user.getSalary().intValue() > 2000);
+                .allMatch(user -> user.getId() % 2 == 0 && user.getSalary().intValue() > salary);
         return check;
 
     }

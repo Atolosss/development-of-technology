@@ -7,7 +7,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @UtilityClass
-public class UserMapper {
+public final class UserMapper {
+
 
     public static final String SEPARATOR = ";";
 
