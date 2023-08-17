@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-//TODO: Файл содержит шапку, поправить логику в коде+
+//TODO: Файл содержит шапку, поправить логику в коде
 //TODO: BigDecimal разобраться, что это и зачем+
 //TODO: Расширить функционал для новой колонки salary
 //TODO: nio vs io
@@ -47,37 +47,28 @@ public class FileUserRepository implements CrudRepository<User, Long> {
     }
 
     public BigDecimal averageSalary(final int age) {
-        BigDecimal sumSalary = readUsersFromFile().stream()
+
+        return BigDecimal.valueOf(readUsersFromFile().stream()
                 .filter(user -> user.getAge() > age)
                 .map(User::getSalary)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        long count = readUsersFromFile().stream()
-                .filter(user -> user.getAge() > age)
-                .count();
-
-        if (count == 0) {
-            return BigDecimal.ZERO;
-        }
-
-        return sumSalary.divide(BigDecimal.valueOf(count));
-
+                .mapToDouble(BigDecimal::doubleValue)
+                .average()
+                .orElse(0)
+        );
     }
 
     public boolean salaryCheck(final int salary) {
-        boolean check = readUsersFromFile()
+        return readUsersFromFile()
                 .stream()
                 .allMatch(user -> user.getId() % 2 == 0 && user.getSalary().intValue() > salary);
-        return check;
-
     }
 
     public List<String> findUniqName(final long line) {
         return readUsersFromFile()
                 .stream()
                 .skip(line)
-                .map(User::getName).
-                distinct()
+                .map(User::getName)
+                .distinct()
                 .toList();
     }
 
@@ -92,10 +83,13 @@ public class FileUserRepository implements CrudRepository<User, Long> {
     public BigDecimal sumOfAllNumbers() {
         return readUsersFromFile()
                 .stream()
-                .map(user -> user.getSalary().add(BigDecimal.valueOf(user.getId())).add(BigDecimal.valueOf(user.getAge())))
+                .map(user -> user.getSalary()
+                        .add(BigDecimal.valueOf(user.getId()))
+                        .add(BigDecimal.valueOf(user.getAge())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    //TODO слетает шапка при обновлении
     @Override
     public void save(final User user) {
         try {
@@ -103,10 +97,10 @@ public class FileUserRepository implements CrudRepository<User, Long> {
             if (users.contains(user)) {
                 int indexOf = users.indexOf(user);
                 users.set(indexOf, user);
-                Files.writeString(Paths.get(file.toURI()), UserMapper.usersToLine(users), StandardOpenOption.TRUNCATE_EXISTING);
+                saveAll(users);
             } else {
                 users.add(user);
-                Files.writeString(Paths.get(file.toURI()), UserMapper.userToLine(user), StandardOpenOption.APPEND);
+                appendUser(user);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -121,7 +115,7 @@ public class FileUserRepository implements CrudRepository<User, Long> {
                 .filter(user -> !user.getId().equals(id))
                 .toList();
         try {
-            Files.writeString(Paths.get(file.toURI()), UserMapper.usersToLine(userList), StandardOpenOption.TRUNCATE_EXISTING);
+            saveAll(userList);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -134,8 +128,8 @@ public class FileUserRepository implements CrudRepository<User, Long> {
 
     private List<User> readUsersFromFile() {
         try (Stream<String> lines = Files.lines(Paths.get(file.toURI()))) {
-            return lines.skip(1)
-                    .filter(line -> !line.isEmpty()) // Фильтруем пустые строки
+            return lines
+                    .skip(1)
                     .map(UserMapper::lineToUser)
                     .toList();
         } catch (IOException e) {
@@ -143,12 +137,12 @@ public class FileUserRepository implements CrudRepository<User, Long> {
         }
     }
 
-    private void writeUsersToFile(final List<User> users) {
-        try {
-            Files.writeString(Paths.get(file.toURI()), UserMapper.usersToLine(users),
-                    StandardOpenOption.APPEND);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+    private void saveAll(final List<User> users) throws IOException {
+        Files.writeString(Paths.get(file.toURI()), UserMapper.usersToLine(users), StandardOpenOption.TRUNCATE_EXISTING);
+    }
+
+    private void appendUser(final User user) throws IOException {
+        Files.writeString(Paths.get(file.toURI()), UserMapper.userToLine(user), StandardOpenOption.APPEND);
     }
 }

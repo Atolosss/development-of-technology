@@ -2,16 +2,12 @@ package generics;
 
 import collection.MyArrayList;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public final class Main {
     private Main() {
     }
 
     public static void main(final String[] args) {
 
-        List<Fruit> fruitList = new ArrayList<>();
         Box<Orange> orangeBox = new Box<>();
         Box<Apple> appleBox = new Box<>();
         appleBox.addFruits(new Apple(), new Apple(), new Apple());

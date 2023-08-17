@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
+
 public final class HomeWork {
 
     public static final int REPEAT = 3;
@@ -94,10 +95,30 @@ public final class HomeWork {
         return check;
     }
 
-    public static void reversString(final String string) {
-        StringBuilder stringBuilder = new StringBuilder(string);
-        stringBuilder.reverse();
-        System.out.println(stringBuilder);
+    public static String reversString(final String string) {
+        char[] characters = string.toCharArray();
+        for (int i = 0; i < characters.length / 2; i++) {
+            char temp = characters[i];
+            characters[i] = characters[characters.length - 1 - i];
+            characters[characters.length - 1 - i] = temp;
+        }
+        return new String(characters);
+    }
+
+    public static String reversStringTwoPointers(final String string) {
+        char[] chars = string.toCharArray();
+        int left = 0;
+        int right = chars.length - 1;
+
+        while (left < right) {
+            char temp = chars[left];
+            chars[left] = chars[right];
+            chars[right] = temp;
+
+            left++;
+            right--;
+        }
+        return new String(chars);
     }
 
     public static void findMaxValue(final int[] num) {
@@ -112,7 +133,7 @@ public final class HomeWork {
 
     // abc ccc bbb cccc, a = 1 , b = 2, c = 3;
 //    TODO: возвращать не число ,а слово. StringBuilder или String
-
+    //TODO: сделать за O(n)
     public static StringBuilder getMaxWord(final String str, final Map<Character, Integer> charSize) {
         char[] chars = str.toCharArray();
         int max = 0;
@@ -138,38 +159,63 @@ public final class HomeWork {
         return sb.reverse();
     }
 
-        public void guessTheNumberGame() {
-            Random random = new Random();
-            int answer = 1;
-            int attempt = 0;
-            Scanner sc = new Scanner(System.in);
-            while (answer != 0) {
-                int randomNumber = random.nextInt(BOUND);
-                while (attempt < REPEAT) {
-                    System.out.println("Введите число :");
-                    int number = sc.nextInt();
-                    if (number > randomNumber) {
-                        System.out.println("Ваше число больше");
-                    } else if (number < randomNumber) {
-                        System.out.println("Ваше число меньше");
-                    } else {
-                        System.out.println("Поздравляю! Вы угадали!");
-                        break;
-                    }
-                    attempt++;
+    public void guessTheNumberGame() {
+        Random random = new Random();
+        int answer = 1;
+        int attempt = 0;
+        Scanner sc = new Scanner(System.in);
+        while (answer != 0) {
+            int randomNumber = random.nextInt(BOUND);
+            while (attempt < REPEAT) {
+                System.out.println("Введите число :");
+                int number = sc.nextInt();
+                if (number > randomNumber) {
+                    System.out.println("Ваше число больше");
+                } else if (number < randomNumber) {
+                    System.out.println("Ваше число меньше");
+                } else {
+                    System.out.println("Поздравляю! Вы угадали!");
+                    break;
                 }
-                attempt = 0;
-                System.out.println("Повторить игру еще раз? 1 - да / 0 - нет");
-                answer = sc.nextInt();
+                attempt++;
             }
-            sc.close();
+            attempt = 0;
+            System.out.println("Повторить игру еще раз? 1 - да / 0 - нет");
+            answer = sc.nextInt();
         }
-        //    sting => abc bbc ccb tess
-//sting => gfd hjk, map <key, value>
-//нужно написать функцию, которая вернет слово с наибольшей суммой.
-//Сумма - это соотношение буква к какому-то числу
+        sc.close();
+    }
 
+    //TODO Squares of a Sorted Array
+    //Given an integer array nums sorted in non-decreasing order, return an array of the squares of each number sorted in non-decreasing order.
+    //
+    //
+    //
+    //Example 1:
+    //
+    //Input: nums = [-4,-1,0,3,10]
+    //Output: [0,1,9,16,100]
+    //Explanation: After squaring, the array becomes [16,1,0,9,100].
+    //After sorting, it becomes [0,1,9,16,100].
+    //Example 2:
+    //
+    //Input: nums = [-7,-3,2,3,11]
+    //Output: [4,9,9,49,121]
+    //
+    //
+    //Constraints:
+    //
+    //1 <= nums.length <= 104
+    //-104 <= nums[i] <= 104
+    //nums is sorted in non-decreasing order.
+    //
+    //
+    //Follow up: Squaring each element and sorting the new array is very trivial, could you find an O(n) solution using a different approach?
 
+    //TODO: Two Sum
+    //Example 2: Given a sorted array of unique integers and a target integer, return true if there exists a pair of numbers that sum to target, false otherwise. This problem is similar to Two Sum. (In Two Sum, the input is not sorted).
+    //
+    //For example, given nums = [1, 2, 4, 6, 8, 9, 14, 15] and target = 13, return true because 4 + 9 = 13.
 }
 
 
