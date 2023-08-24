@@ -1,6 +1,5 @@
 package algorithms;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
@@ -154,31 +153,27 @@ public final class HomeWork {
         return maxWord;
     }
 
-    public void guessTheNumberGame() {
-        Random random = new Random();
-        int answer = 1;
-        int attempt = 0;
-        Scanner sc = new Scanner(System.in);
-        while (answer != 0) {
-            int randomNumber = random.nextInt(BOUND);
-            while (attempt < REPEAT) {
-                System.out.println("Введите число :");
-                int number = sc.nextInt();
-                if (number > randomNumber) {
-                    System.out.println("Ваше число больше");
-                } else if (number < randomNumber) {
-                    System.out.println("Ваше число меньше");
-                } else {
-                    System.out.println("Поздравляю! Вы угадали!");
-                    break;
-                }
-                attempt++;
+    public static int[] squaresOfASortedArray(final int[] array) {
+        int[] result = new int[array.length];
+        int left = 0;
+        int right = array.length - 1;
+        int index = array.length - 1;
+
+        while (left <= right) {
+            int leftSquare = (int) Math.pow(array[left], 2);
+            int rightSquare = (int) Math.pow(array[right], 2);
+
+            if (leftSquare > rightSquare) {
+                result[index] = leftSquare;
+                left++;
+            } else {
+                result[index] = rightSquare;
+                right--;
             }
-            attempt = 0;
-            System.out.println("Повторить игру еще раз? 1 - да / 0 - нет");
-            answer = sc.nextInt();
+            index--;
         }
-        sc.close();
+
+        return result;
     }
 
     //TODO Squares of a Sorted Array
@@ -207,47 +202,52 @@ public final class HomeWork {
     //
     //Follow up: Squaring each element and sorting the new array is very trivial, could you find an O(n) solution using a different approach?
 
-    public static int[] squaresOfASortedArray(final int[] array) {
-        int[] result = new int[array.length];
-        int left = 0;
-        int right = array.length - 1;
-        int index = array.length - 1;
-
-        while (left <= right) {
-            int leftSquare = (int) Math.pow(array[left], 2);
-            int rightSquare = (int) Math.pow(array[right], 2);
-
-            if (leftSquare > rightSquare) {
-                result[index] = leftSquare;
-                left++;
-            } else {
-                result[index] = rightSquare;
-                right--;
-            }
-            index--;
-        }
-
-        return result;
-    }
     //TODO: Two Sum
     //Example 2: Given a sorted array of unique integers and a target integer, return true if there exists a pair of numbers that sum to target, false otherwise. This problem is similar to Two Sum. (In Two Sum, the input is not sorted).
     //
     //For example, given nums = [1, 2, 4, 6, 8, 9, 14, 15] and target = 13, return true because 4 + 9 = 13.
     public static boolean twoSum(int[] array, int target) {
-        int count = 0;
-        for (int i = 0; i < array.length; i++) {
-            for (int j = i+1;j<array.length;j++){
-                if(array[i]+array[j]==target){
-                    count = 1;
-                }
+        int left = 0;
+        int right = array.length - 1;
+        while (left <= right) {
+            if (left + right > target) {
+                right--;
+            } else if (left + right < target) {
+                left++;
+            } else {
+                return true;
             }
-        }
-        if(count==0){
-            return false;
-        }else {
-            return true;
-        }
 
+        }
+        return false;
+    }
+
+
+    public void guessTheNumberGame() {
+        Random random = new Random();
+        int answer = 1;
+        int attempt = 0;
+        Scanner sc = new Scanner(System.in);
+        while (answer != 0) {
+            int randomNumber = random.nextInt(BOUND);
+            while (attempt < REPEAT) {
+                System.out.println("Введите число :");
+                int number = sc.nextInt();
+                if (number > randomNumber) {
+                    System.out.println("Ваше число больше");
+                } else if (number < randomNumber) {
+                    System.out.println("Ваше число меньше");
+                } else {
+                    System.out.println("Поздравляю! Вы угадали!");
+                    break;
+                }
+                attempt++;
+            }
+            attempt = 0;
+            System.out.println("Повторить игру еще раз? 1 - да / 0 - нет");
+            answer = sc.nextInt();
+        }
+        sc.close();
     }
 }
 
