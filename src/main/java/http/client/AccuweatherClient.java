@@ -1,6 +1,9 @@
 package http.client;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import http.ReadPropertiesUtils;
+import http.model.dto.currentconditions.CurrentConditionsRoot;
 import http.model.dto.topcities.TopcitiesRoot;
 import http.model.enums.CityNumber;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +14,6 @@ import okhttp3.Response;
 
 import java.io.IOException;
 
-//TODO: current conditions method
-//TODO: Вынести общую часть из обоих методов отдельный приватный метод (дженерики)
 
 @RequiredArgsConstructor
 public class AccuweatherClient {
@@ -30,25 +31,50 @@ public class AccuweatherClient {
                 .addPathSegment("topcities")
                 .addPathSegment(String.valueOf(cityNumber.getValue()))
                 //TODO: Сделать класс ReadPropertiesUtils в котором поместить apikey и читать оттуда
-                .addQueryParameter("apikey", "")
+                .addQueryParameter("apikey", ReadPropertiesUtils.getProperty("apikey"))
                 .build()
                 .toString();
 
+        TypeReference<TopcitiesRoot[]> typeReference = new TypeReference<>() {
+        };
+        return call(url, typeReference);
+    }
+
+    public CurrentConditionsRoot[] getCurrentConditions(final String key) {
+        var url = HttpUrl.parse(HOST)
+                .newBuilder()
+                .addPathSegment("currentconditions")
+                .addPathSegment("v1")
+                .addPathSegment(key)
+                .addQueryParameter("apikey", ReadPropertiesUtils.getProperty("apikey"))
+                .build()
+                .toString();
+
+        TypeReference<CurrentConditionsRoot[]> typeReference = new TypeReference<>() {
+        };
+        return call(url, typeReference);
+
+    }
+
+    private <T> T call(String url, TypeReference<T> typeReference) {
         var request = new Request.Builder()
                 .get()
                 .url(url)
                 .build();
-
         System.out.println("Sending rq: " + request);
         try (Response response = okHttpClient.newCall(request).execute()) {
-            System.out.println("Received rs: " + response);
+            System.out.println("Reciveng rs: " + response);
 
             String json = response.body().string();
             System.out.println(json);
 
-            return objectMapper.readValue(json, TopcitiesRoot[].class);
+            return objectMapper.readValue(json, typeReference);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 }
+
+
+
+

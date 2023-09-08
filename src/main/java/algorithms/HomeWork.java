@@ -1,5 +1,6 @@
 package algorithms;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
@@ -248,6 +249,26 @@ public final class HomeWork {
             answer = sc.nextInt();
         }
         sc.close();
+    }
+
+    //Задача 1: Поиск первого неповторяющегося символа в строке.
+    //
+    //Описание: Дана строка, состоящая из букв в нижнем регистре и/или верхнем регистре.
+    // Вам нужно найти первый неповторяющийся символ в этой строке и вернуть его индекс. Если такого символа нет, верните -1.
+
+    // lvaccl
+    public int findSingleChar(String str) {
+        char[] chars = str.toCharArray();
+        Map<Character, Integer> characterIntegerMap = new HashMap<>();
+        for (int i = 0; i < chars.length; i++) {
+            characterIntegerMap.put(chars[i], characterIntegerMap.getOrDefault(chars[i], 1));
+        }
+        for (int i = 0; i < chars.length; i++) {
+            if (characterIntegerMap.get(chars[i]) == 1) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
 

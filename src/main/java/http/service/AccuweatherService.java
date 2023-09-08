@@ -1,41 +1,59 @@
 package http.service;
 
 import http.client.AccuweatherClient;
+import http.model.dto.currentconditions.CurrentConditionsRoot;
 import http.model.dto.topcities.TopcitiesRoot;
 import http.model.enums.CityNumber;
 import lombok.RequiredArgsConstructor;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 @RequiredArgsConstructor
 public class AccuweatherService {
     private final AccuweatherClient accuweatherClient;
 
+    private final Map<CityNumber, TopcitiesRoot[]> topcitiesCache = new HashMap<>();
+
     private static void printCityNumbers() {
         Arrays.stream(CityNumber.values())
                 .forEach(cityNumber -> System.out.println(cityNumber.getValue()));
     }
 
-    //TODO: доделать вызов и вывод прогноза погоды
-    //TODO: необходимо выбирать город в котором нужно получить погоду по наименованию
     public void run() {
-        //TODO: close resource
-        var scanner = new Scanner(System.in, StandardCharsets.UTF_8);
-        String input;
-        do {
-            System.out.println("Выбери количество городов: ");
-            printCityNumbers();
+        try (var scanner = new Scanner(System.in, StandardCharsets.UTF_8)) {
+            String input;
+            do {
+                System.out.println("Выбери количество городов: ");
+                printCityNumbers();
 
-            var cityNumber = CityNumber.getByValue(scanner.nextInt());
-            TopcitiesRoot[] topcities = accuweatherClient.getTopcities(cityNumber);
+                var cityNumber = CityNumber.getByValue(scanner.nextInt());
+                if (!topcitiesCache.containsKey(cityNumber)) {
+                    topcitiesCache.put(cityNumber, accuweatherClient.getTopcities(cityNumber));
+                }
+
+                System.out.println("Выбирете город : ");
+                Arrays.stream(topcitiesCache.get(cityNumber))
+                        .forEach(System.out::println);
+                String chosenCity = scanner.next();
 
 
-            System.out.println(Arrays.toString(topcities));
+                TopcitiesRoot topcitiesRoot1 = Arrays.stream(topcitiesCache.get(cityNumber))
+                        .filter(topcitiesRoot -> topcitiesRoot.getEnglishName().equals(chosenCity))
+                        .findFirst()
+                        .orElseThrow();
+                CurrentConditionsRoot[] currentConditionsRoots = accuweatherClient.getCurrentConditions(String.valueOf(topcitiesRoot1.getKey()));
+                Arrays.stream(currentConditionsRoots)
+                        .forEach(System.out::println);
+                System.out.println("Еще? 'Y' - да, любая другая клавиша - нет");
+                input = scanner.next();
+            } while ("Y".equals(input));
+        }
 
-            System.out.println("Еще? 'Y' - да, любая другая клавиша - нет");
-            input = scanner.next();
-        } while ("Y".equals(input));
     }
 }
+
+
