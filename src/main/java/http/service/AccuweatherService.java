@@ -52,9 +52,9 @@ public class AccuweatherService {
                 CurrentConditionsRoot[] currentConditionsRoots = accuweatherClient.getCurrentConditions(String.valueOf(topcitiesRoot1.getKey()));
                 Arrays.stream(currentConditionsRoots)
                         .forEach(System.out::println);
-//                CrudRepository.DatabaseConnection();
-//                CrudRepository.createRecord(topcitiesRoot1, Arrays.stream(currentConditionsRoots).findFirst(temp) );
-//                CrudRepository.closeConnection();
+                CrudRepository.DatabaseConnection();
+                CrudRepository.createRecord(topcitiesRoot1, Arrays.stream(currentConditionsRoots).findFirst() );
+                CrudRepository.closeConnection();
                 System.out.println("Еще? 'Y' - да, любая другая клавиша - нет");
                 input = scanner.next();
             } while ("Y".equals(input));
