@@ -14,8 +14,7 @@ public class ReadPropertiesUtils {
                     .getResourceAsStream("application.properties")) {
                 Properties properties = new Properties();
                 properties.load(inputStream);
-                return properties.getProperty(key)
-                        ;
+                return properties.getProperty(key);
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
