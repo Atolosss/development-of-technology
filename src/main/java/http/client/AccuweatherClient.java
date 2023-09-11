@@ -30,7 +30,6 @@ public class AccuweatherClient {
                 .addPathSegment("v1")
                 .addPathSegment("topcities")
                 .addPathSegment(String.valueOf(cityNumber.getValue()))
-                //TODO: Сделать класс ReadPropertiesUtils в котором поместить apikey и читать оттуда
                 .addQueryParameter("apikey", ReadPropertiesUtils.getProperty("apikey"))
                 .build()
                 .toString();

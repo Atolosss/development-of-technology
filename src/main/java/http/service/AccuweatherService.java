@@ -53,7 +53,7 @@ public class AccuweatherService {
                 Arrays.stream(currentConditionsRoots)
                         .forEach(System.out::println);
                 CrudRepository.DatabaseConnection();
-                CrudRepository.createRecord(topcitiesRoot1, Arrays.stream(currentConditionsRoots).findFirst() );
+                CrudRepository.createRecord(topcitiesRoot1, ? );
                 CrudRepository.closeConnection();
                 System.out.println("Еще? 'Y' - да, любая другая клавиша - нет");
                 input = scanner.next();
