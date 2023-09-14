@@ -2,7 +2,7 @@ package http.client;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import http.ReadPropertiesUtils;
+import http.utils.ReadPropertiesUtils;
 import http.model.dto.currentconditions.CurrentConditionsRoot;
 import http.model.dto.topcities.TopcitiesRoot;
 import http.model.enums.CityNumber;
@@ -55,7 +55,7 @@ public class AccuweatherClient {
 
     }
 
-    private <T> T call(String url, TypeReference<T> typeReference) {
+    private <T> T call(final String url, final TypeReference<T> typeReference) {
         var request = new Request.Builder()
                 .get()
                 .url(url)
