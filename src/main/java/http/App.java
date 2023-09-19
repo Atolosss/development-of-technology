@@ -55,8 +55,8 @@ public class App {
                              id               serial primary key,
                              temperature      decimal     not null,
                              create_date_time timestamp,
-                             id_city int ,
-                             FOREIGN KEY (id_city) REFERENCES cityHistory (id)
+                             city_id int ,
+                             FOREIGN KEY (city_id) REFERENCES cityHistory (id)
                          );
 
                     """;

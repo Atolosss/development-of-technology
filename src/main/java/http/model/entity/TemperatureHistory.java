@@ -12,6 +12,5 @@ public class TemperatureHistory extends BaseEntity {
     private BigDecimal temperature;
     private LocalDateTime createDateTime;
     private Long cityId;
-    private CityHistory cityHistory;
 
 }

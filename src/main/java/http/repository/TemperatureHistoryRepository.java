@@ -4,32 +4,31 @@ import crud.repository.CrudRepository;
 import http.model.entity.TemperatureHistory;
 import http.utils.PgConnectionUtils;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class TemperatureHistoryRepository implements CrudRepository<TemperatureHistory, Long> {
 
+    private static TemperatureHistory extractTemperatureHistory(ResultSet resultSet) throws SQLException {
+        return TemperatureHistory.builder()
+                .id(resultSet.getLong("id"))
+                .temperature(resultSet.getBigDecimal("temperature"))
+                .createDateTime(resultSet.getTimestamp("create_date_time")
+                        .toLocalDateTime())
+                .build();
+    }
+
     @Override
     public Optional<TemperatureHistory> findById(final Long id) {
-        String sql = "SELECT * FROM temperaturehistory WHERE id = " + id;
+        String sql = "SELECT * FROM temperaturehistory WHERE id = ?";
         try (var connection = PgConnectionUtils.getConnection();
-             var statement = connection.createStatement();
-             var resultSet = statement.executeQuery(sql)) {
+             var statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, id);
+            var resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                TemperatureHistory temperatureHistory = TemperatureHistory.builder()
-                        .id(resultSet.getLong("id"))
-                        .temperature(resultSet.getBigDecimal("temperature"))
-                        .createDateTime(resultSet.getTimestamp("create_date_time")
-                                .toLocalDateTime())
-                        .build();
-                return Optional.ofNullable(temperatureHistory);
+                return Optional.ofNullable(extractTemperatureHistory(resultSet));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -39,13 +38,13 @@ public class TemperatureHistoryRepository implements CrudRepository<TemperatureH
 
     @Override
     public TemperatureHistory save(final TemperatureHistory temperatureHistory) {
-        String sql = "INSERT INTO temperaturehistory (id, temperature, create_date_time) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO temperaturehistory (temperature, create_date_time,city_id) VALUES (?, ?, ?)";
 
         try (Connection connection = PgConnectionUtils.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setLong(1, temperatureHistory.getId());
-            statement.setBigDecimal(2, temperatureHistory.getTemperature());
-            statement.setTimestamp(3, Timestamp.valueOf(temperatureHistory.getCreateDateTime()));
+            statement.setBigDecimal(1, temperatureHistory.getTemperature());
+            statement.setTimestamp(2, Timestamp.valueOf(temperatureHistory.getCreateDateTime()));
+            statement.setLong(3,temperatureHistory.getCityId());
 
             statement.executeUpdate();
             temperatureHistory.setId(PgConnectionUtils.getGeneratedKeys(statement));
@@ -60,9 +59,11 @@ public class TemperatureHistoryRepository implements CrudRepository<TemperatureH
 
     @Override
     public void delete(final Long id) {
-        String sql = "DELETE FROM temperaturehistory WHERE id = " + id;
+        String sql = "DELETE FROM temperaturehistory WHERE id = ?";
         try (var connection = PgConnectionUtils.getConnection();
-             var statement = connection.createStatement()) {
+             var statement = connection.prepareStatement(sql)) {
+            statement.setLong(1,id);
+
             statement.executeUpdate(sql);
             connection.commit();
 
@@ -79,31 +80,9 @@ public class TemperatureHistoryRepository implements CrudRepository<TemperatureH
              var resultSet = statement.executeQuery(sql)) {
             List<TemperatureHistory> temperatureHistories = new ArrayList<>();
             while (resultSet.next()) {
-                var temperatureHistory = TemperatureHistory.builder()
-                        .id(resultSet.getLong("id"))
-                        .temperature(resultSet.getBigDecimal("temperature"))
-                        .createDateTime(resultSet.getTimestamp("create_date_time")
-                                .toLocalDateTime())
-                        .build();
-                temperatureHistories.add(temperatureHistory);
+                temperatureHistories.add(extractTemperatureHistory(resultSet));
             }
             return temperatureHistories;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Long getMaxId() {
-        String sql = "INSERT INTO temperaturehistory(city,temperature) VALUES ('lol',0) RETURNING id";
-
-        try (Connection connection = PgConnectionUtils.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
-            if (resultSet.next()) {
-                return resultSet.getLong("id");
-            } else {
-                return 0L;
-            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
