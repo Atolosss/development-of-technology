@@ -3,7 +3,13 @@ package http.repository;
 import crud.repository.CrudRepository;
 import http.model.entity.TemperatureHistory;
 import http.utils.PgConnectionUtils;
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +25,6 @@ public class TemperatureHistoryRepository implements CrudRepository<TemperatureH
             if (resultSet.next()) {
                 TemperatureHistory temperatureHistory = TemperatureHistory.builder()
                         .id(resultSet.getLong("id"))
-                        .city(resultSet.getString("city"))
                         .temperature(resultSet.getBigDecimal("temperature"))
                         .createDateTime(resultSet.getTimestamp("create_date_time")
                                 .toLocalDateTime())
@@ -33,19 +38,24 @@ public class TemperatureHistoryRepository implements CrudRepository<TemperatureH
     }
 
     @Override
-    public void save(final TemperatureHistory temperatureHistory) {
-        String sql = "INSERT INTO temperaturehistory (id, city, temperature, create_date_time) VALUES (?, ?, ?, ?)";
+    public TemperatureHistory save(final TemperatureHistory temperatureHistory) {
+        String sql = "INSERT INTO temperaturehistory (id, temperature, create_date_time) VALUES (?, ?, ?)";
+
         try (Connection connection = PgConnectionUtils.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setLong(1, temperatureHistory.getId());
-            statement.setString(2, temperatureHistory.getCity());
-            statement.setBigDecimal(3, temperatureHistory.getTemperature());
-            statement.setTimestamp(4, Timestamp.valueOf(temperatureHistory.getCreateDateTime()));
+            statement.setBigDecimal(2, temperatureHistory.getTemperature());
+            statement.setTimestamp(3, Timestamp.valueOf(temperatureHistory.getCreateDateTime()));
+
             statement.executeUpdate();
+            temperatureHistory.setId(PgConnectionUtils.getGeneratedKeys(statement));
+
             connection.commit();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        return temperatureHistory;
     }
 
     @Override
@@ -71,7 +81,6 @@ public class TemperatureHistoryRepository implements CrudRepository<TemperatureH
             while (resultSet.next()) {
                 var temperatureHistory = TemperatureHistory.builder()
                         .id(resultSet.getLong("id"))
-                        .city(resultSet.getString("city"))
                         .temperature(resultSet.getBigDecimal("temperature"))
                         .createDateTime(resultSet.getTimestamp("create_date_time")
                                 .toLocalDateTime())

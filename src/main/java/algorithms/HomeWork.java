@@ -226,7 +226,7 @@ public final class HomeWork {
     //    0,1  1 2 3 5 8 13 21
 //    n= 8 -> 13
 //    n = 1 -> 0
-    public static int findNumberFibonachi(int n) {
+    public static int findNumberFibonachi(final int n) {
         int x1 = 0;
         int x2 = 1;
         if (n == 1) {
@@ -249,7 +249,7 @@ public final class HomeWork {
     //Описание: Дана строка, состоящая из букв в нижнем регистре и/или верхнем регистре.
     // Вам нужно найти первый неповторяющийся символ в этой строке и вернуть его индекс. Если такого символа нет, верните -1.
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         System.out.println(findNumberFibonachi(8));
     }
 

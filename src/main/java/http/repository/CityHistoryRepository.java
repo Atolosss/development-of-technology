@@ -8,25 +8,29 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CityHistoryRepository implements CrudRepository<CityHistory, Integer> {
+public class CityHistoryRepository implements CrudRepository<CityHistory, Long> {
+
+    private static CityHistory extractCityHistory(final ResultSet resultSet) throws SQLException {
+        return CityHistory.builder()
+                .id(resultSet.getLong("id"))
+                .city(resultSet.getString("city"))
+                .build();
+    }
 
     @Override
-    public Optional<CityHistory> findById(Integer id) {
-        String sql = "SELECT * FROM cityHistory WHERE id_city = " + id;
+    public Optional<CityHistory> findById(final Long id) {
+        String sql = "SELECT * FROM cityHistory WHERE id = ?";
+
         try (var connection = PgConnectionUtils.getConnection();
-             var statement = connection.createStatement();
+             var statement = connection.prepareStatement(sql);
              var resultSet = statement.executeQuery(sql)) {
             if (resultSet.next()) {
-                CityHistory cityHistory = CityHistory.builder()
-                        .idCity(resultSet.getInt("id_city"))
-                        .city(resultSet.getString("city"))
-                        .temperature(resultSet.getBigDecimal("temperature"))
-                        .build();
-                return Optional.ofNullable(cityHistory);
+                return Optional.ofNullable(extractCityHistory(resultSet));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -35,27 +39,30 @@ public class CityHistoryRepository implements CrudRepository<CityHistory, Intege
     }
 
     @Override
-    public void save(CityHistory cityHistory) {
-        String sql = "INSERT INTO cityHistory(id_city, city, temperature) VALUES (?, ?, ?)";
+    public CityHistory save(final CityHistory cityHistory) {
+        String sql = "INSERT INTO cityHistory(city) VALUES (?)";
+
         try (Connection connection = PgConnectionUtils.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, cityHistory.getIdCity());
-            statement.setString(2, cityHistory.getCity());
-            statement.setBigDecimal(3, cityHistory.getTemperature());
+             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, cityHistory.getCity());
             statement.executeUpdate();
+
+            cityHistory.setId(PgConnectionUtils.getGeneratedKeys(statement));
+
             connection.commit();
-
         } catch (SQLException e) {
-
+            throw new RuntimeException();
         }
+        return cityHistory;
     }
 
 
     @Override
-    public void delete(Integer id) {
-        String sql = "DELETE FROM cityHistory WHERE id_city = " + id;
+    public void delete(final Long id) {
+        String sql = "DELETE FROM cityHistory WHERE id = ?";
         try (var connection = PgConnectionUtils.getConnection();
-             var statement = connection.createStatement()) {
+             var statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, id);
             statement.executeUpdate(sql);
             connection.commit();
 
@@ -67,17 +74,13 @@ public class CityHistoryRepository implements CrudRepository<CityHistory, Intege
     @Override
     public List<CityHistory> findAll() {
         String sql = "SELECT * FROM cityHistory";
+
         try (var connection = PgConnectionUtils.getConnection();
              var statement = connection.createStatement();
              var resultSet = statement.executeQuery(sql)) {
             List<CityHistory> cityHistories = new ArrayList<>();
             while (resultSet.next()) {
-                var cityHistory = CityHistory.builder()
-                        .idCity(resultSet.getInt("id_city"))
-                        .city(resultSet.getString("city"))
-                        .temperature(resultSet.getBigDecimal("temperature"))
-                        .build();
-                cityHistories.add(cityHistory);
+                cityHistories.add(extractCityHistory(resultSet));
             }
             return cityHistories;
         } catch (SQLException e) {
@@ -85,40 +88,4 @@ public class CityHistoryRepository implements CrudRepository<CityHistory, Intege
         }
     }
 
-    public int getMaxId() {
-        String sql = "INSERT INTO temperaturehistory(city,temperature) VALUES ('lol',0) RETURNING id";
-
-        try (Connection connection = PgConnectionUtils.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            } else {
-                return 0;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public int findByCity(String city) {
-        String sql = "SELECT * FROM cityHistory WHERE city = ?";
-        try (Connection connection = PgConnectionUtils.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, city);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    CityHistory cityHistory = CityHistory.builder()
-                            .idCity(resultSet.getInt("id_city"))
-                            .city(resultSet.getString("city"))
-                            .temperature(resultSet.getBigDecimal("temperature"))
-                            .build();
-                    return cityHistory.getIdCity();
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return 0;
-    }
 }

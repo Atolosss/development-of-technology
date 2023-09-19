@@ -1,18 +1,17 @@
 package http.model.entity;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
-@Builder
-public class TemperatureHistory {
-    private Long id;
-    private String city;
+@SuperBuilder
+public class TemperatureHistory extends BaseEntity {
     private BigDecimal temperature;
     private LocalDateTime createDateTime;
-    private int idCity;
+    private Long cityId;
     private CityHistory cityHistory;
+
 }

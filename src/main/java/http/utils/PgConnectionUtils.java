@@ -4,20 +4,33 @@ import lombok.experimental.UtilityClass;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @UtilityClass
 public class PgConnectionUtils {
-    static final String DB_URL = "jdbc:postgresql://localhost:5432/example";
-    static final String USER = "postgres";
-    static final String PASS = "12345";
 
-    //TODO: read from ReadPropertiesUtils
     public static Connection getConnection() {
         try {
-            var connection = DriverManager.getConnection(DB_URL, USER, PASS);
+            var url = ReadPropertiesUtils.getProperty("db_url");
+            var user = ReadPropertiesUtils.getProperty("user");
+            var pass = ReadPropertiesUtils.getProperty("pass");
+            var connection = DriverManager.getConnection(url, user, pass);
             connection.setAutoCommit(false);
             return connection;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Long getGeneratedKeys(final PreparedStatement preparedStatement) {
+        try {
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getLong("id");
+            }
+            return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
