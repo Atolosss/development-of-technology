@@ -39,20 +39,3 @@ class Imperial {
     private int unitType;
 }
 
-@Data
-class Metric {
-    @JsonProperty("Value")
-    private double value;
-    @JsonProperty("Unit")
-    private String unit;
-    @JsonProperty("UnitType")
-    private int unitType;
-}
-
-@Data
-class Temperature {
-    @JsonProperty("Metric")
-    private Metric metric;
-    @JsonProperty("Imperial")
-    private Imperial imperial;
-}

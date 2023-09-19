@@ -13,4 +13,6 @@ public class TemperatureHistory {
     private String city;
     private BigDecimal temperature;
     private LocalDateTime createDateTime;
+    private int idCity;
+    private CityHistory cityHistory;
 }

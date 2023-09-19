@@ -38,13 +38,7 @@ public class FileUserRepository implements CrudRepository<User, Long> {
                 .findFirst();
     }
 
-    @Override
-    public Optional<User> findByObject(final User user) {
-        return readUsersFromFile()
-                .stream()
-                .filter(usr -> usr.equals(user))
-                .findFirst();
-    }
+
 
     public BigDecimal averageSalary(final int age) {
 
