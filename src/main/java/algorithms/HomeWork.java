@@ -223,6 +223,35 @@ public final class HomeWork {
         return false;
     }
 
+    //    0,1  1 2 3 5 8 13 21
+//    n= 8 -> 13
+//    n = 1 -> 0
+    public static int findNumberFibonachi(int n) {
+        int x1 = 0;
+        int x2 = 1;
+        if (n == 1) {
+            return x1;
+        }
+        if (n == 2) {
+            return x2;
+        }
+        int sum = 0;
+        for (int i = 2; i < n; i++) {
+            sum = x1 + x2;
+            x1 = x2;
+            x2 = sum;
+        }
+        return sum;
+    }
+
+    //Задача 1: Поиск первого неповторяющегося символа в строке.
+    //
+    //Описание: Дана строка, состоящая из букв в нижнем регистре и/или верхнем регистре.
+    // Вам нужно найти первый неповторяющийся символ в этой строке и вернуть его индекс. Если такого символа нет, верните -1.
+
+    public static void main(String[] args) {
+        System.out.println(findNumberFibonachi(8));
+    }
 
     public void guessTheNumberGame() {
         Random random = new Random();
@@ -250,11 +279,6 @@ public final class HomeWork {
         }
         sc.close();
     }
-
-    //Задача 1: Поиск первого неповторяющегося символа в строке.
-    //
-    //Описание: Дана строка, состоящая из букв в нижнем регистре и/или верхнем регистре.
-    // Вам нужно найти первый неповторяющийся символ в этой строке и вернуть его индекс. Если такого символа нет, верните -1.
 
     // lvaccl
     public int findSingleChar(final String str) {
