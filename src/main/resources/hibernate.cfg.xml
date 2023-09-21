@@ -8,6 +8,8 @@
      <property name="connection.username">postgres</property>
      <property name="connection.password">postgres</property>
     <property name="connection.driver_class">org.postgresql.Driver</property>
-      <property name="hibernate.dialect">org.hibernate.</property>
+      <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+      <mapping class="http.model.entity.CityHistory"/>
+      <mapping class="http.model.entity.TemperatureHistory"/>
   </session-factory>
 </hibernate-configuration>

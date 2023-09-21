@@ -21,13 +21,12 @@ public class App {
         ObjectMapper objectMapper = new ObjectMapper();
 
         AccuweatherClient accuweatherClient = new AccuweatherClient(okHttpClient, objectMapper);
-        TemperatureHistoryRepository temperatureHistoryRepository = new TemperatureHistoryRepository();
-        CityHistoryRepository cityHistoryRepository = new CityHistoryRepository();
+        TemperatureHistoryRepository temperatureHistoryRepository = new TemperatureHistoryRepository(PgConnectionUtils.getBuildsessionfactory());
+        CityHistoryRepository cityHistoryRepository = new CityHistoryRepository(PgConnectionUtils.getBuildsessionfactory());
         AccuweatherService accuweatherService = new AccuweatherService(
                 accuweatherClient, new AccuweatherMapper(), temperatureHistoryRepository, cityHistoryRepository);
 
         initDb();
-        
 
 
         accuweatherService.run();

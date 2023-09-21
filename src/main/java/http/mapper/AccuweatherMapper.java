@@ -3,7 +3,6 @@ package http.mapper;
 import http.model.dto.currentconditions.CurrentConditionsRoot;
 import http.model.entity.CityHistory;
 import http.model.entity.TemperatureHistory;
-
 import java.time.LocalDateTime;
 
 public class AccuweatherMapper {
@@ -14,7 +13,6 @@ public class AccuweatherMapper {
                 .cityId(cityHistory.getId())
                 .build();
     }
-
     public CityHistory toCityHistory(final String name) {
         return CityHistory.builder()
                 .city(name)

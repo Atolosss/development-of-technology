@@ -2,90 +2,92 @@ package http.repository;
 
 import crud.repository.CrudRepository;
 import http.model.entity.TemperatureHistory;
-import http.utils.PgConnectionUtils;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class TemperatureHistoryRepository implements CrudRepository<TemperatureHistory, Long> {
 
-    private static TemperatureHistory extractTemperatureHistory(ResultSet resultSet) throws SQLException {
-        return TemperatureHistory.builder()
-                .id(resultSet.getLong("id"))
-                .temperature(resultSet.getBigDecimal("temperature"))
-                .createDateTime(resultSet.getTimestamp("create_date_time")
-                        .toLocalDateTime())
-                .build();
+    private final SessionFactory sessionFactory;
+
+    public TemperatureHistoryRepository(final SessionFactory factory) {
+        this.sessionFactory = factory;
     }
 
     @Override
     public Optional<TemperatureHistory> findById(final Long id) {
-        String sql = "SELECT * FROM temperaturehistory WHERE id = ?";
-        try (var connection = PgConnectionUtils.getConnection();
-             var statement = connection.prepareStatement(sql)) {
-            statement.setLong(1, id);
-            var resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return Optional.ofNullable(extractTemperatureHistory(resultSet));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        Session session = sessionFactory.openSession();
+        TemperatureHistory temperatureHistory = null;
+
+        try {
+            temperatureHistory = session.get(TemperatureHistory.class, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
-        return Optional.empty();
+        return Optional.ofNullable(temperatureHistory);
     }
 
     @Override
     public TemperatureHistory save(final TemperatureHistory temperatureHistory) {
-        String sql = "INSERT INTO temperaturehistory (temperature, create_date_time,city_id) VALUES (?, ?, ?)";
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
 
-        try (Connection connection = PgConnectionUtils.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setBigDecimal(1, temperatureHistory.getTemperature());
-            statement.setTimestamp(2, Timestamp.valueOf(temperatureHistory.getCreateDateTime()));
-            statement.setLong(3,temperatureHistory.getCityId());
-
-            statement.executeUpdate();
-            temperatureHistory.setId(PgConnectionUtils.getGeneratedKeys(statement));
-
-            connection.commit();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        try {
+            transaction = session.beginTransaction();
+            session.save(temperatureHistory);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
-
         return temperatureHistory;
     }
 
     @Override
     public void delete(final Long id) {
-        String sql = "DELETE FROM temperaturehistory WHERE id = ?";
-        try (var connection = PgConnectionUtils.getConnection();
-             var statement = connection.prepareStatement(sql)) {
-            statement.setLong(1,id);
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
 
-            statement.executeUpdate(sql);
-            connection.commit();
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        try {
+            transaction = session.beginTransaction();
+            TemperatureHistory temperatureHistory = session.get(TemperatureHistory.class, id);
+            if (temperatureHistory != null) {
+                session.remove(temperatureHistory);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
     }
 
     @Override
     public List<TemperatureHistory> findAll() {
-        String sql = "SELECT * FROM temperaturehistory";
-        try (var connection = PgConnectionUtils.getConnection();
-             var statement = connection.createStatement();
-             var resultSet = statement.executeQuery(sql)) {
-            List<TemperatureHistory> temperatureHistories = new ArrayList<>();
-            while (resultSet.next()) {
-                temperatureHistories.add(extractTemperatureHistory(resultSet));
-            }
-            return temperatureHistories;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        Session session = sessionFactory.openSession();
+        List<TemperatureHistory> temperatureHistories = null;
+
+        try {
+            temperatureHistories = session.createQuery("FROM TemperatureHistory ", TemperatureHistory.class).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
+
+        return temperatureHistories;
     }
 }
 

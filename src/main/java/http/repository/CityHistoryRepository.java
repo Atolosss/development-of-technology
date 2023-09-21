@@ -2,90 +2,96 @@ package http.repository;
 
 import crud.repository.CrudRepository;
 import http.model.entity.CityHistory;
-import http.utils.PgConnectionUtils;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class CityHistoryRepository implements CrudRepository<CityHistory, Long> {
 
-    private static CityHistory extractCityHistory(final ResultSet resultSet) throws SQLException {
-        return CityHistory.builder()
-                .id(resultSet.getLong("id"))
-                .city(resultSet.getString("city"))
-                .build();
+    private final SessionFactory sessionFactory;
+
+    public CityHistoryRepository(final SessionFactory factory) {
+        this.sessionFactory = factory;
     }
 
     @Override
     public Optional<CityHistory> findById(final Long id) {
-        String sql = "SELECT * FROM cityHistory WHERE id = ?";
+        Session session = sessionFactory.openSession();
+        CityHistory cityHistory = null;
 
-        try (var connection = PgConnectionUtils.getConnection();
-             var statement = connection.prepareStatement(sql);
-             var resultSet = statement.executeQuery(sql)) {
-            if (resultSet.next()) {
-                return Optional.ofNullable(extractCityHistory(resultSet));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        try {
+            cityHistory = session.get(CityHistory.class, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
-        return Optional.empty();
+
+        return Optional.ofNullable(cityHistory);
     }
 
     @Override
     public CityHistory save(final CityHistory cityHistory) {
-        String sql = "INSERT INTO cityHistory(city) VALUES (?)";
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
 
-        try (Connection connection = PgConnectionUtils.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, cityHistory.getCity());
-            statement.executeUpdate();
-
-            cityHistory.setId(PgConnectionUtils.getGeneratedKeys(statement));
-
-            connection.commit();
-        } catch (SQLException e) {
-            throw new RuntimeException();
+        try {
+            transaction = session.beginTransaction();
+            session.persist(cityHistory);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
+
         return cityHistory;
     }
 
 
     @Override
     public void delete(final Long id) {
-        String sql = "DELETE FROM cityHistory WHERE id = ?";
-        try (var connection = PgConnectionUtils.getConnection();
-             var statement = connection.prepareStatement(sql)) {
-            statement.setLong(1, id);
-            statement.executeUpdate(sql);
-            connection.commit();
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        try {
+            transaction = session.beginTransaction();
+            CityHistory cityHistory = session.get(CityHistory.class, id);
+            if (cityHistory != null) {
+                session.remove(cityHistory);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
     }
 
     @Override
     public List<CityHistory> findAll() {
-        String sql = "SELECT * FROM cityHistory";
+        Session session = sessionFactory.openSession();
+        List<CityHistory> cityHistories = null;
 
-        try (var connection = PgConnectionUtils.getConnection();
-             var statement = connection.createStatement();
-             var resultSet = statement.executeQuery(sql)) {
-            List<CityHistory> cityHistories = new ArrayList<>();
-            while (resultSet.next()) {
-                cityHistories.add(extractCityHistory(resultSet));
-            }
-            return cityHistories;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        try {
+            cityHistories = session.createQuery("FROM CityHistory", CityHistory.class).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
-    }
 
+        return cityHistories;
+    }
 }
+
+
