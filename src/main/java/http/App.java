@@ -27,13 +27,7 @@ public class App {
                 accuweatherClient, new AccuweatherMapper(), temperatureHistoryRepository, cityHistoryRepository);
 
         initDb();
-
-//       accuweatherService.save(TemperatureHistory.builder()
-//                .id(1L)
-//                .city("Minsk")
-//                .temperature(BigDecimal.valueOf(20))
-//                .createDateTime(LocalDateTime.now())
-//                .build());
+        
 
 
         accuweatherService.run();

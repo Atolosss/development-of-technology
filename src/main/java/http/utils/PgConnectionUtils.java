@@ -16,12 +16,14 @@ public class PgConnectionUtils {
             var url = ReadPropertiesUtils.getProperty("db_url");
             var user = ReadPropertiesUtils.getProperty("user");
             var pass = ReadPropertiesUtils.getProperty("pass");
-            var connection = DriverManager.getConnection(url, user, pass);
-            connection.setAutoCommit(false);
-            return connection;
+            DriverManager.getConnection(url,user,pass);
+//            connection.setAutoCommit(false);
+//            return connection;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+//
+
     }
 
     public static Long getGeneratedKeys(final PreparedStatement preparedStatement) {
