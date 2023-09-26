@@ -56,11 +56,11 @@ public class AccuweatherService {
                         .orElseThrow();
                 CurrentConditionsRoot[] currentConditionsRoots = accuweatherClient.getCurrentConditions(String.valueOf(topcitiesRoot1.getKey()));
 
-                CityHistory savedCityHistory = cityHistoryRepository.save(
-                        accuweatherMapper.toCityHistory(chosenCity));
+                CityHistory cityHistory = accuweatherMapper.toCityHistory(chosenCity);
+                cityHistoryRepository.save(cityHistory);
 
                 TemperatureHistory savedTemperatureHistory = temperatureHistoryRepository.save(
-                        accuweatherMapper.toTemperatureHistory(currentConditionsRoots, savedCityHistory));
+                        accuweatherMapper.toTemperatureHistory(currentConditionsRoots, cityHistory));
 
                 System.out.println(savedTemperatureHistory);
                 System.out.println("Еще? 'Y' - да, любая другая клавиша - нет");

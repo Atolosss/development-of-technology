@@ -24,6 +24,8 @@
         <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
         <okhttp.version>4.9.3</okhttp.version>
         <jackson-databind.version>2.15.0</jackson-databind.version>
+        <hibernate-core.version>6.3.0.Final</hibernate-core.version>
+        <postgresql.version>42.6.0</postgresql.version>
     </properties>
 
     <dependencies>
@@ -35,7 +37,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>6.2.9.Final</version>
+            <version>${hibernate-core.version}</version>
         </dependency>
 
         <dependency>
@@ -51,7 +53,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.5.4</version>
+            <version>${postgresql.version}</version>
         </dependency>
     </dependencies>
 

@@ -15,16 +15,19 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
-@Entity
 @Builder
-@Table(name = "cityHistory")
 @AllArgsConstructor
 @NoArgsConstructor
+
+@Entity
+@Table(name = "cityHistory")
 public class CityHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String city;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cityHistory")
     private List<TemperatureHistory> temperatureHistories;
 }

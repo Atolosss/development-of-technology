@@ -10,7 +10,7 @@ public class AccuweatherMapper {
         return TemperatureHistory.builder()
                 .temperature(currentConditionsRoots[0].getTemperature().getMetric().getValue())
                 .createDateTime(LocalDateTime.now())
-                .cityId(cityHistory.getId())
+                .cityHistory(cityHistory)
                 .build();
     }
     public CityHistory toCityHistory(final String name) {
