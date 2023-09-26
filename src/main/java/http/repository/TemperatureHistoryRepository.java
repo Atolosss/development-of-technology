@@ -29,10 +29,10 @@ public class TemperatureHistoryRepository implements CrudRepository<TemperatureH
             session.persist(temperatureHistory);
             transaction.commit();
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             if (transaction != null) {
                 transaction.rollback();
             }
-            e.printStackTrace();
         }
         return temperatureHistory;
     }
