@@ -67,9 +67,7 @@ public class AccuweatherService {
                 input = scanner.next();
             } while ("Y".equals(input));
         }
-
     }
-
 }
 
 
