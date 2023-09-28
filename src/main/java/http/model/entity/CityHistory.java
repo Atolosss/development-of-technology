@@ -2,6 +2,7 @@ package http.model.entity;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -28,6 +29,18 @@ public class CityHistory {
 
     private String city;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cityHistory")
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            mappedBy = "cityHistory",
+            fetch = FetchType.LAZY)
     private List<TemperatureHistory> temperatureHistories;
+
+    @Override
+    public String toString() {
+        return "CityHistory{" +
+                "id=" + id +
+                ", city='" + city + '\'' +
+//                ", temperatureHistories=" + temperatureHistories +
+                '}';
+    }
 }

@@ -4,7 +4,6 @@ import crud.repository.CrudRepository;
 import http.model.entity.CityHistory;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.MutationQuery;
 import org.hibernate.query.SelectionQuery;
 
 import java.util.List;
@@ -13,6 +12,7 @@ import java.util.Optional;
 import static http.utils.HibernateUtil.getSessionFactory;
 
 public class CityHistoryRepository implements CrudRepository<CityHistory, Long> {
+
 
     @Override
     public Optional<CityHistory> findById(final Long id) {
@@ -23,9 +23,12 @@ public class CityHistoryRepository implements CrudRepository<CityHistory, Long> 
         }
     }
 
-    public Optional<CityHistory> findByName(final String name){
+    public Optional<CityHistory> findByName(final String name) {
+        var select = "select city from CityHistory city where city.city=:name";
+
         try (var session = getSessionFactory().openSession()) {
-            SelectionQuery<CityHistory> query = session.createSelectionQuery(" select city from CityHistory city where city.city=:name",CityHistory.class).setParameter("name",name);
+            SelectionQuery<CityHistory> query = session.createSelectionQuery(select, CityHistory.class)
+                    .setParameter("name", name);
             return query.getResultList().stream().findFirst();
         } catch (Exception e) {
             throw new RuntimeException();

@@ -39,4 +39,5 @@ public class TemperatureHistory {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "city_id", nullable = false)
     private CityHistory cityHistory;
+
 }
