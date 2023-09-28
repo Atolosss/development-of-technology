@@ -12,10 +12,7 @@ import http.repository.TemperatureHistoryRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 @RequiredArgsConstructor
 public class AccuweatherService {
@@ -57,10 +54,10 @@ public class AccuweatherService {
                 CurrentConditionsRoot[] currentConditionsRoots = accuweatherClient.getCurrentConditions(String.valueOf(topcitiesRoot1.getKey()));
 
                 CityHistory cityHistory = accuweatherMapper.toCityHistory(chosenCity);
-                findCity(cityHistory);
+                CityHistory city = findCity(cityHistory);
 
                 TemperatureHistory savedTemperatureHistory = temperatureHistoryRepository.save(
-                        accuweatherMapper.toTemperatureHistory(currentConditionsRoots, cityHistory));
+                        accuweatherMapper.toTemperatureHistory(currentConditionsRoots, city));
 
                 System.out.println(savedTemperatureHistory);
                 System.out.println("Еще? 'Y' - да, любая другая клавиша - нет");
@@ -68,10 +65,12 @@ public class AccuweatherService {
             } while ("Y".equals(input));
         }
     }
-    public void findCity(CityHistory cityHistory){
-       if(cityHistoryRepository.findByName(cityHistory.getCity()).isEmpty()){
-           cityHistoryRepository.save(cityHistory);
+    public CityHistory findCity(CityHistory cityHistory){
+        Optional<CityHistory> city = cityHistoryRepository.findByName(cityHistory.getCity());
+        if(city.isEmpty()){
+            return cityHistoryRepository.save(cityHistory);
        }
+       return city.get();
     }
 }
 
