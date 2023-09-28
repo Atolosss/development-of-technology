@@ -57,7 +57,7 @@ public class AccuweatherService {
                 CurrentConditionsRoot[] currentConditionsRoots = accuweatherClient.getCurrentConditions(String.valueOf(topcitiesRoot1.getKey()));
 
                 CityHistory cityHistory = accuweatherMapper.toCityHistory(chosenCity);
-                cityHistoryRepository.save(cityHistory);
+                findCity(cityHistory);
 
                 TemperatureHistory savedTemperatureHistory = temperatureHistoryRepository.save(
                         accuweatherMapper.toTemperatureHistory(currentConditionsRoots, cityHistory));
@@ -67,6 +67,11 @@ public class AccuweatherService {
                 input = scanner.next();
             } while ("Y".equals(input));
         }
+    }
+    public void findCity(CityHistory cityHistory){
+       if(cityHistoryRepository.findByName(cityHistory.getCity()).isEmpty()){
+           cityHistoryRepository.save(cityHistory);
+       }
     }
 }
 
