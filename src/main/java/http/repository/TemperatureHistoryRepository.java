@@ -26,7 +26,7 @@ public class TemperatureHistoryRepository implements CrudRepository<TemperatureH
         Transaction transaction = null;
         try (Session session = getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.persist(temperatureHistory);
+            session.merge(temperatureHistory);
             transaction.commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -27,7 +27,7 @@ public class CityHistoryRepository implements CrudRepository<CityHistory, Long> 
 
         try (Session session = getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.persist(cityHistory);
+            session.merge(cityHistory);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -65,7 +65,6 @@ public class CityHistoryRepository implements CrudRepository<CityHistory, Long> 
         } catch (Exception e) {
             throw new RuntimeException();
         }
-
     }
 }
 
