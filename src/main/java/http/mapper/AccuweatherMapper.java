@@ -15,7 +15,7 @@ public class AccuweatherMapper {
     }
     public CityHistory toCityHistory(final String name) {
         return CityHistory.builder()
-                .city(name)
+                .name(name)
                 .build();
     }
 }

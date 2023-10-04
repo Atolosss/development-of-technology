@@ -9,8 +9,6 @@ import http.model.entity.TemperatureHistory;
 import http.model.enums.CityNumber;
 import http.repository.CityHistoryRepository;
 import http.repository.TemperatureHistoryRepository;
-import jakarta.persistence.Entity;
-import jakarta.persistence.NamedEntityGraph;
 import lombok.RequiredArgsConstructor;
 
 import java.nio.charset.StandardCharsets;
@@ -58,6 +56,7 @@ public class AccuweatherService {
                 CityHistory cityHistory = accuweatherMapper.toCityHistory(chosenCity);
                 CityHistory city = findCity(cityHistory);
 
+                // todo: сохранять в базу в новой колонке jsonb сырой ответ в формате json
                 TemperatureHistory savedTemperatureHistory = temperatureHistoryRepository.save(
                         accuweatherMapper.toTemperatureHistory(currentConditionsRoots, city));
 
@@ -68,7 +67,7 @@ public class AccuweatherService {
         }
     }
     public CityHistory findCity(CityHistory cityHistory){
-        Optional<CityHistory> city = cityHistoryRepository.findByName(cityHistory.getCity());
+        Optional<CityHistory> city = cityHistoryRepository.findByName(cityHistory.getName());
         if(city.isEmpty()){
             return cityHistoryRepository.save(cityHistory);
        }

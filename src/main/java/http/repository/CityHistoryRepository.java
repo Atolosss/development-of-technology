@@ -25,7 +25,7 @@ public class CityHistoryRepository implements CrudRepository<CityHistory, Long> 
     }
 
     public Optional<CityHistory> findByName(final String name) {
-        var select = "select city from CityHistory city where city.city=:name";
+        var select = "select name from CityHistory city where name.name=:name";
 
         try (var session = getSessionFactory().openSession()) {
             SelectionQuery<CityHistory> query = session.createSelectionQuery(select, CityHistory.class)

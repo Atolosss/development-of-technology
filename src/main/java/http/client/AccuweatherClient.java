@@ -23,6 +23,7 @@ public class AccuweatherClient {
     private final OkHttpClient okHttpClient;
     private final ObjectMapper objectMapper;
 
+    // todo: переписать с использованием Map
     public TopcitiesRoot[] getTopcities(final CityNumber cityNumber) {
         var url = HttpUrl.parse(HOST)
                 .newBuilder()

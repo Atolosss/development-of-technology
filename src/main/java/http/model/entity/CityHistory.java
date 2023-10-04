@@ -3,27 +3,30 @@ package http.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 
+//todo:
 @Entity
-//@NamedEntityGraph(name = "cityHistory_entity-graph",attributeNodes = @NamedAttributeNode("temperatureHistories"))
 @Table(name = "cityHistory")
-public class CityHistory {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class CityHistory extends BaseEntity {
+    private String name;
 
-    private String city;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cityHistory",fetch = FetchType.LAZY)
+    // todo: Попробовать на практике что такое orphanRemoval = true и в чем отличие от cascadeType REMOVE
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            mappedBy = "cityHistory",
+            fetch = FetchType.LAZY
+    )
     @ToString.Exclude
-    private List<TemperatureHistory> temperatureHistories;
-
+    @Builder.Default
+    private List<TemperatureHistory> temperatureHistories = new ArrayList<>();
 
 }
