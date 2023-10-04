@@ -1,17 +1,9 @@
 package http.model.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.CascadeType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.util.List;
 
 @Data
@@ -20,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 
 @Entity
+//@NamedEntityGraph(name = "cityHistory_entity-graph",attributeNodes = @NamedAttributeNode("temperatureHistories"))
 @Table(name = "cityHistory")
 public class CityHistory {
     @Id
@@ -28,6 +21,9 @@ public class CityHistory {
 
     private String city;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cityHistory")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cityHistory",fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<TemperatureHistory> temperatureHistories;
+
+
 }

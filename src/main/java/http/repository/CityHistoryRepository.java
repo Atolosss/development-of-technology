@@ -2,6 +2,7 @@ package http.repository;
 
 import crud.repository.CrudRepository;
 import http.model.entity.CityHistory;
+import jakarta.persistence.Entity;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.MutationQuery;
