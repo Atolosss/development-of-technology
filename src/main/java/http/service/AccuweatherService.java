@@ -9,6 +9,8 @@ import http.model.entity.TemperatureHistory;
 import http.model.enums.CityNumber;
 import http.repository.CityHistoryRepository;
 import http.repository.TemperatureHistoryRepository;
+import jakarta.persistence.Entity;
+import jakarta.persistence.NamedEntityGraph;
 import lombok.RequiredArgsConstructor;
 
 import java.nio.charset.StandardCharsets;
