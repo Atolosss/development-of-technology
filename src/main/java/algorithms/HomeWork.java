@@ -132,9 +132,6 @@ public final class HomeWork {
         System.out.println(maxValue);
     }
 
-    // abc ccc bbb cccc, a = 1 , b = 2, c = 3;
-//    TODO: возвращать не число ,а слово. StringBuilder или String
-    //TODO: сделать за O(n)
     public static StringBuilder getMaxWord(final String str, final Map<Character, Integer> charSize) {
         String[] words = str.split(" ");
         StringBuilder maxWord = new StringBuilder();
@@ -177,36 +174,6 @@ public final class HomeWork {
         return result;
     }
 
-    //TODO Squares of a Sorted Array
-    //Given an integer array nums sorted in non-decreasing order, return an array of the squares of each number sorted in non-decreasing order.
-    //
-    //
-    //
-    //Example 1:
-    //
-    //Input: nums = [-4,-1,0,3,10]
-    //Output: [0,1,9,16,100]
-    //Explanation: After squaring, the array becomes [16,1,0,9,100].
-    //After sorting, it becomes [0,1,9,16,100].
-    //Example 2:
-    //
-    //Input: nums = [-7,-3,2,3,11]
-    //Output: [4,9,9,49,121]
-    //
-    //
-    //Constraints:
-    //
-    //1 <= nums.length <= 104
-    //-104 <= nums[i] <= 104
-    //nums is sorted in non-decreasing order.
-    //
-    //
-    //Follow up: Squaring each element and sorting the new array is very trivial, could you find an O(n) solution using a different approach?
-
-    //TODO: Two Sum
-    //Example 2: Given a sorted array of unique integers and a target integer, return true if there exists a pair of numbers that sum to target, false otherwise. This problem is similar to Two Sum. (In Two Sum, the input is not sorted).
-    //
-    //For example, given nums = [1, 2, 4, 6, 8, 9, 14, 15] and target = 13, return true because 4 + 9 = 13.
     public static boolean twoSum(final int[] array, final int target) {
         int left = 0;
         int right = array.length - 1;

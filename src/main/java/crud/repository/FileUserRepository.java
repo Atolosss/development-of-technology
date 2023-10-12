@@ -70,8 +70,6 @@ public class FileUserRepository implements CrudRepository<User, Long> {
                         .add(BigDecimal.valueOf(user.getAge())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
-
-    //TODO слетает шапка при обновлении
     @Override
     public User save(final User user) {
         try {

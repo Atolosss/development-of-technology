@@ -1,8 +1,11 @@
 package http.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import http.client.AccuweatherClient;
 import http.mapper.AccuweatherMapper;
 import http.model.dto.currentconditions.CurrentConditionsRoot;
+import http.model.dto.currentconditions.CurrentConditionsRootWrapper;
 import http.model.dto.topcities.TopcitiesRoot;
 import http.model.entity.CityHistory;
 import http.model.entity.TemperatureHistory;
@@ -21,6 +24,8 @@ public class AccuweatherService {
     private final TemperatureHistoryRepository temperatureHistoryRepository;
     private final CityHistoryRepository cityHistoryRepository;
 
+    private final ObjectMapper objectMapper;
+
     private final Map<CityNumber, TopcitiesRoot[]> topcitiesCache = new HashMap<>();
 
 
@@ -30,7 +35,7 @@ public class AccuweatherService {
                 .forEach(cityNumber -> System.out.println(cityNumber.getValue()));
     }
 
-    public void run() {
+    public void run() throws JsonProcessingException {
         try (var scanner = new Scanner(System.in, StandardCharsets.UTF_8)) {
             String input;
             do {
@@ -51,14 +56,14 @@ public class AccuweatherService {
                         .filter(topcitiesRoot -> topcitiesRoot.getEnglishName().equals(chosenCity))
                         .findFirst()
                         .orElseThrow();
-                CurrentConditionsRoot[] currentConditionsRoots = accuweatherClient.getCurrentConditions(String.valueOf(topcitiesRoot1.getKey()));
-
+                CurrentConditionsRootWrapper currentConditionsRoots = accuweatherClient.getCurrentConditions(String.valueOf(topcitiesRoot1.getKey()));
                 CityHistory cityHistory = accuweatherMapper.toCityHistory(chosenCity);
                 CityHistory city = findCity(cityHistory);
 
+
                 // todo: сохранять в базу в новой колонке jsonb сырой ответ в формате json
                 TemperatureHistory savedTemperatureHistory = temperatureHistoryRepository.save(
-                        accuweatherMapper.toTemperatureHistory(currentConditionsRoots, city));
+                        accuweatherMapper.toTemperatureHistory(currentConditionsRoots.getCurrentConditionsRoots(), city, currentConditionsRoots.getJson()));
 
                 System.out.println(savedTemperatureHistory);
                 System.out.println("Еще? 'Y' - да, любая другая клавиша - нет");
@@ -66,12 +71,13 @@ public class AccuweatherService {
             } while ("Y".equals(input));
         }
     }
-    public CityHistory findCity(CityHistory cityHistory){
+
+    public CityHistory findCity(CityHistory cityHistory) {
         Optional<CityHistory> city = cityHistoryRepository.findByName(cityHistory.getName());
-        if(city.isEmpty()){
+        if (city.isEmpty()) {
             return cityHistoryRepository.save(cityHistory);
-       }
-       return city.get();
+        }
+        return city.get();
     }
 }
 

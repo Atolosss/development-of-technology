@@ -24,7 +24,6 @@ public class App {
 
     @SneakyThrows
     public static void main(final String[] args) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         OkHttpClient okHttpClient = new OkHttpClient();
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -32,10 +31,8 @@ public class App {
         TemperatureHistoryRepository temperatureHistoryRepository = new TemperatureHistoryRepository();
         CityHistoryRepository cityHistoryRepository = new CityHistoryRepository();
         AccuweatherService accuweatherService = new AccuweatherService(
-                accuweatherClient, new AccuweatherMapper(), temperatureHistoryRepository, cityHistoryRepository);
+                accuweatherClient, new AccuweatherMapper(), temperatureHistoryRepository, cityHistoryRepository,objectMapper);
 
-
-        CityHistory cityHistory = CityHistory.builder()
-                .build();
+    accuweatherService.run();
     }
 }

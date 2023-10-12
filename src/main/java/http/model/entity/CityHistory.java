@@ -13,13 +13,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 
-//todo:
 @Entity
 @Table(name = "cityHistory")
 public class CityHistory extends BaseEntity {
+
     private String name;
 
-    // todo: Попробовать на практике что такое orphanRemoval = true и в чем отличие от cascadeType REMOVE
     @OneToMany(
             cascade = CascadeType.ALL,
             mappedBy = "cityHistory",

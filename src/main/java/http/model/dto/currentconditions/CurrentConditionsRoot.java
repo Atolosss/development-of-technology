@@ -3,10 +3,11 @@ package http.model.dto.currentconditions;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class CurrentConditionsRoot {
+public class CurrentConditionsRoot implements Serializable {
     @JsonProperty("LocalObservationDateTime")
     private Date localObservationDateTime;
     @JsonProperty("EpochTime")
@@ -30,7 +31,7 @@ public class CurrentConditionsRoot {
 }
 
 @Data
-class Imperial {
+class Imperial  implements  Serializable{
     @JsonProperty("Value")
     private int value;
     @JsonProperty("Unit")

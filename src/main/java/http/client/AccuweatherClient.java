@@ -2,10 +2,11 @@ package http.client;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import http.utils.ReadPropertiesUtils;
 import http.model.dto.currentconditions.CurrentConditionsRoot;
+import http.model.dto.currentconditions.CurrentConditionsRootWrapper;
 import http.model.dto.topcities.TopcitiesRoot;
 import http.model.enums.CityNumber;
+import http.utils.ReadPropertiesUtils;
 import lombok.RequiredArgsConstructor;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -23,7 +24,6 @@ public class AccuweatherClient {
     private final OkHttpClient okHttpClient;
     private final ObjectMapper objectMapper;
 
-    // todo: переписать с использованием Map
     public TopcitiesRoot[] getTopcities(final CityNumber cityNumber) {
         var url = HttpUrl.parse(HOST)
                 .newBuilder()
@@ -40,7 +40,7 @@ public class AccuweatherClient {
         return call(url, typeReference);
     }
 
-    public CurrentConditionsRoot[] getCurrentConditions(final String key) {
+    public CurrentConditionsRootWrapper getCurrentConditions(final String key) {
         var url = HttpUrl.parse(HOST)
                 .newBuilder()
                 .addPathSegment("currentconditions")
@@ -50,9 +50,7 @@ public class AccuweatherClient {
                 .build()
                 .toString();
 
-        TypeReference<CurrentConditionsRoot[]> typeReference = new TypeReference<>() {
-        };
-        return call(url, typeReference);
+        return call(url);
 
     }
 
@@ -64,11 +62,31 @@ public class AccuweatherClient {
         System.out.println("Sending rq: " + request);
         try (Response response = okHttpClient.newCall(request).execute()) {
             System.out.println("Reciveng rs: " + response);
-
             String json = response.body().string();
             System.out.println(json);
 
             return objectMapper.readValue(json, typeReference);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private CurrentConditionsRootWrapper call(final String url) {
+        var request = new Request.Builder()
+                .get()
+                .url(url)
+                .build();
+        System.out.println("Sending rq: " + request);
+        try (Response response = okHttpClient.newCall(request).execute()) {
+            System.out.println("Reciveng rs: " + response);
+            String json = response.body().string();
+            System.out.println(json);
+
+            CurrentConditionsRoot[] currentConditionsRoots = objectMapper.readValue(json, CurrentConditionsRoot[].class);
+            return CurrentConditionsRootWrapper.builder()
+                    .currentConditionsRoots(currentConditionsRoots)
+                    .json(json)
+                    .build();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
